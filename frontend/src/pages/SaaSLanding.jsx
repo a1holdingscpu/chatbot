@@ -35,6 +35,11 @@ export default function SaaSLanding() {
       description: "Proprietary scoring system (0-100) for residential, commercial, land, and parks"
     },
     {
+      icon: <Building2 className="w-6 h-6" />,
+      title: "MLS Integration",
+      description: "Enterprise: Direct access to state MLS - search, filter, and import properties instantly"
+    },
+    {
       icon: <Target className="w-6 h-6" />,
       title: "Strategy Recommendations",
       description: "Get AI-powered investment strategy suggestions for each deal"
@@ -53,6 +58,11 @@ export default function SaaSLanding() {
       icon: <Clock className="w-6 h-6" />,
       title: "Real-time Analysis",
       description: "Instant calculations for Cap Rate, CoC, NOI, cash flow, and ARV"
+    },
+    {
+      icon: <Sparkles className="w-6 h-6" />,
+      title: "AI Deal Analysis",
+      description: "GPT-powered predictive scoring and investment insights for every property"
     }
   ];
 
