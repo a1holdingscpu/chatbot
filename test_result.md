@@ -523,10 +523,10 @@ frontend:
           agent: "testing"
           comment: "✅ TESTED: Dashboard loads successfully with welcome message, user name in navigation, key metrics cards (47 Deals Analyzed, 8 File Uploads, Member Since Jan 2025), and Quick Actions section with Upload New Deals, Browse All Deals, and View Analytics buttons."
   
-  - task: "Upload Page - Excel file upload"
+  - task: "Upload Page - All 5 upload methods"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/UploadPage.jsx"
+    file: "/app/frontend/src/pages/UploadPageNew.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
@@ -537,6 +537,9 @@ frontend:
         - working: true
           agent: "testing"
           comment: "✅ TESTED: Upload page displays correctly with 'Upload Deals' heading, file input interface, and drag-and-drop zone with 'Drop your Excel file here or click to browse' message. Supports .xlsx and .xls formats as indicated."
+        - working: true
+          agent: "testing"
+          comment: "✅ RE-TESTED PHASE 4: Upload page completely functional with 'Import Deals' title. All 5 upload methods working: (1) Excel tab with drag-and-drop 'Drop your Excel file here or click to browse' (2) URL tab with input field and file type dropdown (3) CSV tab with textarea (4) JSON tab with textarea (5) Manual tab with complete form (address, price, property type, ARV, beds, baths, etc.). All tabs, form fields, and buttons properly implemented."
   
   - task: "Deals Page - Deal listing with filters"
     implemented: true
