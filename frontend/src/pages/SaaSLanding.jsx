@@ -78,7 +78,8 @@ export default function SaaSLanding() {
           "Email support"
         ],
         cta: "Start Free Trial",
-        popular: false
+        popular: false,
+        stripeBuyButton: true
       },
       {
         name: "Professional",
