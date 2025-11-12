@@ -303,6 +303,13 @@ export default function DealsPage() {
         onOpenChange={setShowAIDialog}
       />
 
+      {/* Purchase Report Dialog */}
+      <PurchaseReportDialog
+        deal={purchaseDeal}
+        open={showPurchaseDialog}
+        onOpenChange={setShowPurchaseDialog}
+      />
+
       {/* Deal Details Dialog */}
       <Dialog open={!!selectedDeal} onOpenChange={(open) => !open && setSelectedDeal(null)}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" data-testid="deal-details-dialog">
