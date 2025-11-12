@@ -100,6 +100,7 @@ function AppContent() {
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/deals" element={<DealsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
     </div>
   );
