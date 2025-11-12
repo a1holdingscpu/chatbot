@@ -80,28 +80,28 @@ If you need additional promotional images, use these prompts:
 
 ### Logo Variations
 ```
-Create a modern, professional logo for "DealiQ Pro", a real estate investment 
+Create a modern, professional logo for "DealiQ", a real estate investment 
 analysis platform. Include a minimalist house icon with a gradient from blue 
 (#2563eb) to purple (#7c3aed). Clean, tech-forward design. White background.
 ```
 
 ### Social Media Graphics
 ```
-Design a social media banner for DealiQ Pro real estate platform. Blue to 
+Design a social media banner for DealiQ real estate platform. Blue to 
 purple gradient background, modern house icons, dashboard analytics visuals, 
 professional and tech-focused aesthetic. 1200x630px.
 ```
 
 ### Business Card
 ```
-Modern business card design for DealiQ Pro. Front: logo, name, title. Back: 
+Modern business card design for DealiQ. Front: logo, name, title. Back: 
 blue-purple gradient, tagline "Real Estate Deal Intelligence". Minimalist, 
 professional, tech industry style.
 ```
 
 ### Marketing Materials
 ```
-Create promotional poster for DealiQ Pro - AI-powered real estate deal analysis 
+Create promotional poster for DealiQ - AI-powered real estate deal analysis 
 software. Show dashboard interface, property analytics, modern gradient design, 
 professional investors, blue and purple color scheme. Clean, corporate style.
 ```
