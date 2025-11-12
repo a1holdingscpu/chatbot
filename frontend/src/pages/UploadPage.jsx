@@ -185,7 +185,7 @@ export default function UploadPage() {
               <div className="space-y-4">
                 <div className="flex space-x-4">
                   <Button
-                    onClick={() => navigate('/analyzer/deals')}
+                    onClick={() => navigate('/deals')}
                     className="bg-green-600 hover:bg-green-700"
                     data-testid="view-deals-btn"
                   >
@@ -193,7 +193,7 @@ export default function UploadPage() {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => navigate('/analyzer/analytics')}
+                    onClick={() => navigate('/analytics')}
                     data-testid="view-analytics-btn"
                   >
                     View Analytics

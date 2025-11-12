@@ -184,7 +184,7 @@ export default function InvestorLanding() {
               <a href="#performance" className="text-gray-700 hover:text-blue-600 transition font-medium">Performance</a>
               <a href="#opportunities" className="text-gray-700 hover:text-blue-600 transition font-medium">Invest</a>
               <button 
-                onClick={() => navigate('/analyzer')}
+                onClick={() => navigate('/dashboard')}
                 className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition font-medium"
               >
                 <Calculator className="inline w-4 h-4 mr-2" />
@@ -360,7 +360,7 @@ export default function InvestorLanding() {
               Schedule Investor Call
             </button>
             <button 
-              onClick={() => navigate('/analyzer')}
+              onClick={() => navigate('/dashboard')}
               className="border-2 border-white text-white px-10 py-5 rounded-lg text-xl font-bold hover:bg-white/10 transition flex items-center justify-center"
             >
               <Calculator className="w-6 h-6 mr-2" />
@@ -406,7 +406,7 @@ export default function InvestorLanding() {
               <ul className="space-y-2 text-sm">
                 <li><a href="#overview" className="hover:text-white transition">Investment Overview</a></li>
                 <li><a href="#pipeline" className="hover:text-white transition">Active Deals</a></li>
-                <li><button onClick={() => navigate('/analyzer')} className="hover:text-white transition">Deal Analyzer Tool</button></li>
+                <li><button onClick={() => navigate('/dashboard')} className="hover:text-white transition">Deal Analyzer Tool</button></li>
               </ul>
             </div>
             
