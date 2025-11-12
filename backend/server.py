@@ -16,6 +16,13 @@ import shutil
 from analyzer_service import analyze_deals_from_excel
 from ai_analysis_service import AIAnalysisService
 from report_service import ReportService
+from data_import_service import (
+    analyze_from_url, 
+    analyze_from_csv_text, 
+    analyze_from_json, 
+    create_manual_deal,
+    validate_deal_data
+)
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionRequest, CheckoutSessionResponse, CheckoutStatusResponse
 from fastapi.responses import StreamingResponse
 
