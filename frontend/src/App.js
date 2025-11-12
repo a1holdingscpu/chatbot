@@ -109,22 +109,23 @@ function Navigation() {
 
 function AppContent() {
   const location = useLocation();
-  const showNav = location.pathname !== '/';
+  const showNav = location.pathname !== '/' && location.pathname !== '/login';
 
   return (
     <div className="App min-h-screen bg-gray-50">
       {showNav && <Navigation />}
       <Toaster position="top-right" />
       <Routes>
-        {/* Landing Page */}
+        {/* Public Routes */}
         <Route path="/" element={<SaaSLanding />} />
+        <Route path="/login" element={<LoginPage />} />
         
-        {/* App Routes */}
-        <Route path="/dashboard" element={<ClientDashboard />} />
-        <Route path="/upload" element={<UploadPage />} />
-        <Route path="/deals" element={<DealsPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><ClientDashboard /></ProtectedRoute>} />
+        <Route path="/upload" element={<ProtectedRoute><UploadPage /></ProtectedRoute>} />
+        <Route path="/deals" element={<ProtectedRoute><DealsPage /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+        <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
       </Routes>
     </div>
   );
@@ -133,7 +134,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
