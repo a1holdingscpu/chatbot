@@ -22,27 +22,24 @@ DealIQ Pro is a complete real estate investment platform combining a **public-fa
 
 ## Features
 
-### 🎯 Deal Analysis
+### 🏠 Investor Landing Page (`/`)
+- **Live Metrics Dashboard**: Animated portfolio value, active deals, ROI tracking
+- **Active Deal Pipeline**: Showcase current investment opportunities
+- **Track Record**: Company performance metrics since 2021
+- **Market Performance**: Geographic breakdown and ROI by market
+- **Investment Opportunities**: Multiple investment vehicle options
+- **Social Proof**: Investor testimonials and success stories
+- **Direct CTA**: Schedule calls and access deal analyzer
+- **Professional Design**: Modern, responsive UI with gradient effects
+
+### 🎯 Deal Analyzer Tool (`/analyzer/*`)
 - **Automated Scoring**: Proprietary algorithm scores deals 0-100 based on property type
-- **Strategy Recommendations**: Get optimal investment strategies (Wholesale, Flip, Buy & Hold, etc.)
-- **Financial Metrics**: Complete analysis including Cap Rate, Cash-on-Cash returns, NOI, cash flow
-
-### 📊 Analytics Dashboard
-- Portfolio overview with key performance metrics
-- Strategy and property type distribution charts
-- Top performing deals tracking
-- Real-time statistics and insights
-
-### 📁 File Upload
-- Drag-and-drop Excel file upload
-- Instant analysis of multiple deals
-- Batch processing of property portfolios
-
-### 🔍 Deal Management
-- Searchable and filterable deal table
-- Sort by any metric (score, price, cap rate, etc.)
-- Detailed view of all financial calculations
-- Strategy-based filtering
+- **Strategy Recommendations**: Optimal strategies (Wholesale, Flip, Buy & Hold, etc.)
+- **Financial Metrics**: Complete analysis (Cap Rate, Cash-on-Cash, NOI, cash flow)
+- **File Upload**: Drag-and-drop Excel processing
+- **Analytics Dashboard**: Portfolio overview and performance tracking
+- **Deal Management**: Advanced filtering, sorting, and comparison
+- **Deal Details**: Complete financial breakdown for each property
 
 ## Tech Stack
 
