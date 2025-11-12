@@ -136,6 +136,7 @@ function AppContent() {
         {/* Protected Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><ClientDashboard /></ProtectedRoute>} />
         <Route path="/upload" element={<ProtectedRoute><UploadPage /></ProtectedRoute>} />
+        <Route path="/mls" element={<ProtectedRoute><MLSPage /></ProtectedRoute>} />
         <Route path="/deals" element={<ProtectedRoute><DealsPage /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
         <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
