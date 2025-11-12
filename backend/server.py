@@ -623,9 +623,15 @@ async def search_mls_properties(
         raise HTTPException(status_code=500, detail=f"MLS search error: {str(e)}")
 
 @api_router.get("/mls/property/{mls_id}")
-async def get_mls_property(mls_id: str):
+async def get_mls_property(
+    mls_id: str,
+    user: Dict[str, Any] = Depends(get_current_user)
+):
     """Get detailed MLS property information - Enterprise users only"""
     try:
+        # Check MLS access
+        if not auth_service.has_mls_access(user):
+            raise HTTPException(status_code=403, detail="MLS access not available")
         mls_service = MLSService()
         property_data = mls_service.get_property_details(mls_id)
         
