@@ -1,0 +1,50 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="200" cy="200" r="190" fill="url(#gradient)" />
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- House Icon -->
+  <g filter="url(#shadow)">
+    <!-- Roof -->
+    <path d="M 200 100 L 280 160 L 280 170 L 200 110 L 120 170 L 120 160 Z" fill="white" opacity="0.9"/>
+    
+    <!-- House Body -->
+    <rect x="130" y="160" width="140" height="100" fill="white" opacity="0.9" rx="5"/>
+    
+    <!-- Door -->
+    <rect x="175" y="200" width="50" height="60" fill="#2563eb" rx="3"/>
+    <circle cx="215" cy="230" r="3" fill="white"/>
+    
+    <!-- Windows -->
+    <rect x="145" y="180" width="20" height="20" fill="#2563eb" rx="2"/>
+    <rect x="235" y="180" width="20" height="20" fill="#2563eb" rx="2"/>
+    
+    <!-- Window Dividers -->
+    <line x1="155" y1="180" x2="155" y2="200" stroke="white" stroke-width="2"/>
+    <line x1="145" y1="190" x2="165" y2="190" stroke="white" stroke-width="2"/>
+    <line x1="245" y1="180" x2="245" y2="200" stroke="white" stroke-width="2"/>
+    <line x1="235" y1="190" x2="255" y2="190" stroke="white" stroke-width="2"/>
+  </g>
+  
+  <!-- DealiQ Text -->
+  <text x="200" y="300" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">
+    DealiQ
+  </text>
+  
+  <!-- Pro Badge -->
+  <rect x="170" y="315" width="60" height="25" fill="white" rx="12"/>
+  <text x="200" y="333" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2563eb" text-anchor="middle">
+    PRO
+  </text>
+</svg>
