@@ -194,6 +194,124 @@ async def verify_token(user: Dict[str, Any] = Depends(get_current_user)):
     """Verify JWT token and return user data"""
     return {"success": True, "user": user}
 
+class CreateUserRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+    plan: str  # Starter, Professional, Enterprise
+    state: Optional[str] = None
+    mls_access: bool = False
+
+@api_router.post("/admin/users/create")
+async def create_user(
+    request: CreateUserRequest,
+    admin_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Create a new user - Admin only"""
+    try:
+        # Only admin can create users
+        if admin_user.get('id') != 'admin-user':
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        # Check if user already exists
+        existing_user = await db.users.find_one({"email": request.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="User with this email already exists")
+        
+        # Hash password
+        password_hash = auth_service.hash_password(request.password)
+        
+        # Create user document
+        user_data = {
+            'id': str(uuid.uuid4()),
+            'email': request.email,
+            'password_hash': password_hash,
+            'name': request.name,
+            'plan': request.plan,
+            'state': request.state or '',
+            'mls_access': request.mls_access and request.plan == 'Enterprise',
+            'created_at': datetime.now(timezone.utc).isoformat(),
+            'active': True
+        }
+        
+        # Insert into database
+        await db.users.insert_one(user_data)
+        
+        logger.info(f"User created: {request.email} - {request.plan} plan")
+        
+        return {
+            "success": True,
+            "message": f"User {request.email} created successfully",
+            "user": {
+                'id': user_data['id'],
+                'email': user_data['email'],
+                'name': user_data['name'],
+                'plan': user_data['plan'],
+                'state': user_data['state'],
+                'mls_access': user_data['mls_access']
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating user: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating user: {str(e)}")
+
+@api_router.get("/admin/users")
+async def list_users(admin_user: Dict[str, Any] = Depends(get_current_user)):
+    """List all users - Admin only"""
+    try:
+        # Only admin can list users
+        if admin_user.get('id') != 'admin-user':
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        # Get all users from database
+        users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(length=None)
+        
+        return {
+            "success": True,
+            "count": len(users),
+            "users": users
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error listing users: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error listing users: {str(e)}")
+
+@api_router.delete("/admin/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    admin_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Delete a user - Admin only"""
+    try:
+        # Only admin can delete users
+        if admin_user.get('id') != 'admin-user':
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        # Cannot delete admin
+        if user_id == 'admin-user':
+            raise HTTPException(status_code=400, detail="Cannot delete admin user")
+        
+        # Delete user
+        result = await db.users.delete_one({"id": user_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        logger.info(f"User deleted: {user_id}")
+        
+        return {"success": True, "message": "User deleted successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting user: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error deleting user: {str(e)}")
+
 @api_router.post("/upload", response_model=UploadResponse)
 async def upload_and_analyze(file: UploadFile = File(...)):
     """Upload Excel file and analyze real estate deals"""
