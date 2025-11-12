@@ -318,8 +318,15 @@ async def upload_from_url(request: URLImportRequest):
     try:
         logger.info(f"Importing deals from URL: {request.url}")
         
+        # Validate URL
+        if not request.url.startswith(('http://', 'https://')):
+            raise HTTPException(status_code=400, detail="Invalid URL: Must start with http:// or https://")
+        
         # Download and analyze
         df = analyze_from_url(request.url, request.file_type)
+        
+        if df.empty:
+            raise HTTPException(status_code=400, detail="No data found in the file")
         
         # Convert DataFrame to dict records
         df['imported_at'] = datetime.now(timezone.utc).isoformat()
@@ -355,9 +362,24 @@ async def upload_from_url(request: URLImportRequest):
             top_deals=top_deals
         )
         
+    except HTTPException:
+        raise
+    except ValueError as e:
+        logger.error(f"Validation error importing from URL: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error importing from URL: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error importing from URL: {str(e)}")
+        error_msg = str(e)
+        
+        # Provide helpful error messages
+        if "File is not a zip file" in error_msg or "not a valid Excel file" in error_msg:
+            error_msg = "The URL does not point to a valid Excel file. Ensure it's a direct download link to an .xlsx or .xls file."
+        elif "No such file or directory" in error_msg:
+            error_msg = "Failed to download file from URL. Please check the URL is accessible."
+        elif "timed out" in error_msg.lower():
+            error_msg = "Request timed out. The file might be too large or the server is slow to respond."
+        
+        raise HTTPException(status_code=500, detail=f"Error importing from URL: {error_msg}")
 
 @api_router.post("/upload-csv", response_model=UploadResponse)
 async def upload_from_csv(request: CSVImportRequest):
