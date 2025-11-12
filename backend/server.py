@@ -88,6 +88,16 @@ class UploadResponse(BaseModel):
     deals_count: int
     top_deals: List[Deal]
 
+class StatusCheckCreate(BaseModel):
+    client_name: str
+
+class PaymentRequest(BaseModel):
+    deal_id: str
+    origin_url: str
+    
+class DownloadRequest(BaseModel):
+    session_id: str
+
 
 # Routes
 @api_router.get("/")
