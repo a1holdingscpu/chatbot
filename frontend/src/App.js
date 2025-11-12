@@ -18,7 +18,28 @@ import PaymentSuccess from './pages/PaymentSuccess';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+}
+
 function Navigation() {
+  const { user, logout } = useAuth();
+  
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
       <div className="container mx-auto px-4">
@@ -67,13 +88,14 @@ function Navigation() {
                 className="text-white hover:bg-white/10"
               >
                 <User className="w-4 h-4 mr-2" />
-                John S.
+                {user?.name || 'User'}
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-white hover:bg-white/10"
-                onClick={() => window.location.href = '/'}
+                onClick={logout}
+                title="Logout"
               >
                 <LogOut className="w-4 h-4" />
               </Button>
