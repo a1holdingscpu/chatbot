@@ -1,4 +1,4 @@
-# DealiQ Pro - Brand Guidelines & Logo Usage
+# DealiQ - Brand Guidelines & Logo Usage
 
 ## Logo Files
 
