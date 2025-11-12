@@ -523,7 +523,7 @@ export default function SaaSLanding() {
               <span className="text-xl font-bold text-white">DealiQ</span>
             </div>
             <div className="text-sm">
-              &copy; 2025 DealiQ Pro. All rights reserved.
+              &copy; 2025 DealiQ. All rights reserved.
             </div>
           </div>
         </div>
