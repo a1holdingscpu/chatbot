@@ -105,6 +105,30 @@ class PaymentRequest(BaseModel):
 class DownloadRequest(BaseModel):
     session_id: str
 
+class URLImportRequest(BaseModel):
+    url: str
+    file_type: str = 'excel'  # excel, csv, json
+
+class CSVImportRequest(BaseModel):
+    csv_text: str
+
+class JSONImportRequest(BaseModel):
+    json_data: Any
+
+class ManualDealRequest(BaseModel):
+    address: str
+    price: float
+    property_type: Optional[str] = "residential"
+    arv: Optional[float] = 0
+    estimated_rehab: Optional[float] = 0
+    monthly_rent: Optional[float] = 0
+    sqft: Optional[float] = 0
+    beds: Optional[int] = 0
+    baths: Optional[float] = 0
+    units: Optional[float] = 1
+    occupancy_pct: Optional[float] = 100
+    notes: Optional[str] = None
+
 
 # Routes
 @api_router.get("/")
