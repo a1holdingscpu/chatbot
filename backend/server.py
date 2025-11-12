@@ -163,6 +163,37 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 async def root():
     return {"message": "DealiQ Pro API - Real Estate Deal Analyzer"}
 
+@api_router.post("/auth/login", response_model=LoginResponse)
+async def login(request: LoginRequest):
+    """Authenticate user and return JWT token"""
+    try:
+        user = auth_service.authenticate_user(request.email, request.password, db)
+        
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+        
+        # Create JWT token
+        token = auth_service.create_token(user)
+        
+        logger.info(f"User logged in: {user['email']}")
+        
+        return LoginResponse(
+            success=True,
+            token=token,
+            user=user
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Login error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Login failed")
+
+@api_router.get("/auth/verify")
+async def verify_token(user: Dict[str, Any] = Depends(get_current_user)):
+    """Verify JWT token and return user data"""
+    return {"success": True, "user": user}
+
 @api_router.post("/upload", response_model=UploadResponse)
 async def upload_and_analyze(file: UploadFile = File(...)):
     """Upload Excel file and analyze real estate deals"""
