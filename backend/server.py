@@ -242,6 +242,31 @@ async def clear_deals():
         logger.error(f"Error clearing deals: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error clearing deals: {str(e)}")
 
+@api_router.post("/deals/{deal_id}/ai-analysis")
+async def get_ai_analysis(deal_id: str):
+    """Get AI-powered predictive analysis for a specific deal"""
+    try:
+        # Get the deal from database
+        deal = await db.deals.find_one({"id": deal_id}, {"_id": 0})
+        
+        if not deal:
+            raise HTTPException(status_code=404, detail="Deal not found")
+        
+        # Initialize AI service
+        ai_service = AIAnalysisService()
+        
+        # Get AI analysis
+        analysis = await ai_service.analyze_deal(deal)
+        
+        logger.info(f"AI analysis completed for deal {deal_id}")
+        return analysis
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in AI analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating AI analysis: {str(e)}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
