@@ -14,6 +14,7 @@ import DealsPage from './pages/DealsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import UploadPage from './pages/UploadPageNew';
 import PaymentSuccess from './pages/PaymentSuccess';
+import MLSPage from './pages/MLSPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
