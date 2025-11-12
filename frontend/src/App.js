@@ -44,6 +44,7 @@ function Navigation() {
   
   // Show MLS link only for Enterprise/Professional users
   const showMLS = user && (user.plan === 'Enterprise' || user.plan === 'Professional');
+  const isAdmin = user && user.id === 'admin-user';
   
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
