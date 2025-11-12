@@ -303,12 +303,45 @@ export default function DealsPage() {
         onOpenChange={setShowAIDialog}
       />
 
-      {/* Purchase Report Dialog */}
-      <PurchaseReportDialog
-        deal={purchaseDeal}
-        open={showPurchaseDialog}
-        onOpenChange={setShowPurchaseDialog}
-      />
+      {/* Purchase Report Dialog with Stripe Buy Button */}
+      <Dialog open={showPurchaseDialog} onOpenChange={setShowPurchaseDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Purchase Premium Report</DialogTitle>
+            <DialogDescription>
+              Get comprehensive analysis for {purchaseDeal?.address || 'this property'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-6 border-2 border-green-200 text-center">
+              <div className="text-4xl font-bold text-green-600 mb-2">$25.00</div>
+              <div className="text-sm text-gray-600">One-time purchase • Instant download</div>
+            </div>
+
+            <div className="text-sm text-gray-600 space-y-2">
+              <p className="font-semibold">Includes:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Complete financial analysis</li>
+                <li>AI-powered insights</li>
+                <li>5 comparable properties</li>
+                <li>Investment scenarios</li>
+                <li>Professional Excel report</li>
+              </ul>
+            </div>
+
+            <stripe-buy-button
+              buy-button-id="buy_btn_1SSVeIBgzLEFvozzXQItGm8o"
+              publishable-key="pk_live_51SSTnVBgzLEFvozzZLSce2x3zFnoMqx3SBGJVeuYM0y8dLETcozDAOWFLXil18lxARueT9gjupFhhSoEKrmVQWcm00Y9MF05LG"
+            >
+            </stripe-buy-button>
+
+            <p className="text-xs text-gray-500 text-center">
+              Secure payment powered by Stripe
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Deal Details Dialog */}
       <Dialog open={!!selectedDeal} onOpenChange={(open) => !open && setSelectedDeal(null)}>
