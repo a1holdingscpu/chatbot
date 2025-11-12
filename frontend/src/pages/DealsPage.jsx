@@ -8,9 +8,10 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Search, Filter, SortAsc, SortDesc, Eye, TrendingUp, TrendingDown, Sparkles } from 'lucide-react';
+import { Search, Filter, SortAsc, SortDesc, Eye, TrendingUp, TrendingDown, Sparkles, FileSpreadsheet } from 'lucide-react';
 import { toast } from 'sonner';
 import AIAnalysisDialog from '../components/AIAnalysisDialog';
+import PurchaseReportDialog from '../components/PurchaseReportDialog';
 
 export default function DealsPage() {
   const [deals, setDeals] = useState([]);
