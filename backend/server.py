@@ -24,6 +24,9 @@ from data_import_service import (
     validate_deal_data
 )
 from mls_service import MLSService
+from auth_service import AuthService
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionRequest, CheckoutSessionResponse, CheckoutStatusResponse
 from fastapi.responses import StreamingResponse
 import io
