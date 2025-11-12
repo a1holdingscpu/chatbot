@@ -121,11 +121,21 @@ DealIQ Pro uses different scoring algorithms based on property type:
 
 ## Getting Started
 
-1. **Upload Deals**: Navigate to Upload page and drop your Excel file
-2. **View Analysis**: Check Dashboard for portfolio overview
-3. **Browse Deals**: Visit Deals page to filter and sort opportunities
-4. **Deep Dive**: Click any deal to view complete financial breakdown
-5. **Track Performance**: Use Analytics to monitor portfolio metrics
+### For Investors (Public View)
+1. **Visit Homepage**: See live portfolio metrics and active deals at `/`
+2. **Explore Opportunities**: Browse current investment opportunities
+3. **View Track Record**: Review company performance since 2021
+4. **Access Analyzer**: Click "Deal Analyzer" button to access internal tool
+5. **Schedule Call**: Use CTA buttons to engage with the team
+
+### For Internal Users (Deal Analysis)
+1. **Access Analyzer**: Navigate to `/analyzer` or click from homepage
+2. **Upload Deals**: Go to Upload page and drop your Excel file
+3. **View Analysis**: Check Dashboard for portfolio overview
+4. **Browse Deals**: Visit Deals page to filter and sort opportunities
+5. **Deep Dive**: Click any deal to view complete financial breakdown
+6. **Track Performance**: Use Analytics to monitor portfolio metrics
+7. **Return Home**: Use "Back to Home" to return to investor portal
 
 ## Sample Data
 
