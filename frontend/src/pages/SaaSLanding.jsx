@@ -207,7 +207,7 @@ export default function SaaSLanding() {
       name: "Michael Chen",
       role: "Portfolio Manager",
       company: "Southwest Investments",
-      quote: "We analyze 200+ deals per month. DealiQ Pro's bulk upload and filtering features have been a game-changer for our team's efficiency.",
+      quote: "We analyze 200+ deals per month. DealiQ's bulk upload and filtering features have been a game-changer for our team's efficiency.",
       rating: 5
     },
     {
