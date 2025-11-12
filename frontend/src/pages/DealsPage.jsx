@@ -249,14 +249,28 @@ export default function DealsPage() {
                         {deal.cash_on_cash_pct.toFixed(2)}%
                       </TableCell>
                       <TableCell className="text-center">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedDeal(deal)}
-                          data-testid={`view-deal-${deal.id}`}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center justify-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedDeal(deal)}
+                            data-testid={`view-deal-${deal.id}`}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setAiAnalysisDeal(deal);
+                              setShowAIDialog(true);
+                            }}
+                            className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                            data-testid={`ai-analysis-${deal.id}`}
+                          >
+                            <Sparkles className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
