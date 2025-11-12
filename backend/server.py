@@ -155,6 +155,10 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     
+    # Map user_id to id for consistency
+    if 'user_id' in user and 'id' not in user:
+        user['id'] = user['user_id']
+    
     return user
 
 
