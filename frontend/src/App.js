@@ -4,8 +4,10 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import axios from 'axios';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
+import { User, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import SaaSLanding from './pages/SaaSLanding';
-import Dashboard from './pages/Dashboard';
+import ClientDashboard from './pages/ClientDashboard';
 import DealsPage from './pages/DealsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import UploadPage from './pages/UploadPage';
@@ -25,7 +27,7 @@ function Navigation() {
             <span className="text-xl font-semibold">Pro</span>
           </Link>
           
-          <div className="flex space-x-1">
+          <div className="flex items-center space-x-1">
             <Link
               to="/dashboard"
               className="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -54,6 +56,25 @@ function Navigation() {
             >
               Analytics
             </Link>
+            
+            <div className="ml-4 pl-4 border-l border-white/20 flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10"
+              >
+                <User className="w-4 h-4 mr-2" />
+                John S.
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10"
+                onClick={() => window.location.href = '/'}
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -74,7 +95,7 @@ function AppContent() {
         <Route path="/" element={<SaaSLanding />} />
         
         {/* App Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<ClientDashboard />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/deals" element={<DealsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
