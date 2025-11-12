@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DealiQ Pro - Logo Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f3f4f6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 40px;
+        }
+        
+        .logo-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo-section h2 {
+            color: #374151;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        .logo-section p {
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .logo-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .dark-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+        
+        .logo-display img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .color-box {
+            text-align: center;
+        }
+        
+        .color-swatch {
+            height: 100px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .color-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .color-code {
+            font-family: monospace;
+            color: #6b7280;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DealiQ Pro - Brand Assets</h1>
+        <p class="subtitle">Logo variations and brand guidelines for promotional materials</p>
+        
+        <!-- Square Logo -->
+        <div class="logo-section">
+            <h2>Square Logo</h2>
+            <p>Use for social media profiles, app icons, and square formats</p>
+            <div class="logo-display">
+                <img src="/logo.svg" alt="DealiQ Pro Square Logo" style="max-width: 300px;">
+            </div>
+            <a href="/logo.svg" download class="download-btn">Download SVG</a>
+        </div>
+        
+        <!-- Horizontal Logo -->
+        <div class="logo-section">
+            <h2>Horizontal Logo</h2>
+            <p>Use for website headers, banners, and wide formats. Includes tagline.</p>
+            <div class="logo-display">
+                <img src="/logo-horizontal.svg" alt="DealiQ Pro Horizontal Logo">
+            </div>
+            <a href="/logo-horizontal.svg" download class="download-btn">Download SVG</a>
+        </div>
+        
+        <!-- White Logo -->
+        <div class="logo-section">
+            <h2>White Logo (Dark Backgrounds)</h2>
+            <p>Use on dark or colored backgrounds for contrast</p>
+            <div class="logo-display dark-bg">
+                <img src="/logo-white.svg" alt="DealiQ Pro White Logo">
+            </div>
+            <a href="/logo-white.svg" download class="download-btn">Download SVG</a>
+        </div>
+        
+        <!-- Brand Colors -->
+        <div class="logo-section">
+            <h2>Brand Colors</h2>
+            <p>Official color palette for DealiQ Pro</p>
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #2563eb;"></div>
+                    <div class="color-name">Primary Blue</div>
+                    <div class="color-code">#2563eb</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #7c3aed;"></div>
+                    <div class="color-name">Primary Purple</div>
+                    <div class="color-code">#7c3aed</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);"></div>
+                    <div class="color-name">Gradient</div>
+                    <div class="color-code">Blue → Purple</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #6b7280;"></div>
+                    <div class="color-name">Gray</div>
+                    <div class="color-code">#6b7280</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usage Guidelines -->
+        <div class="logo-section">
+            <h2>Quick Usage Guidelines</h2>
+            <div style="color: #374151; line-height: 1.8;">
+                <p><strong>✅ Do:</strong></p>
+                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                    <li>Use official logo files provided</li>
+                    <li>Maintain proper clear space around logo</li>
+                    <li>Use white version on dark backgrounds</li>
+                    <li>Maintain aspect ratio when scaling</li>
+                </ul>
+                
+                <p><strong>❌ Don't:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>Stretch or distort the logo</li>
+                    <li>Change colors or add effects</li>
+                    <li>Rotate or flip the logo</li>
+                    <li>Place on busy backgrounds</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Download All -->
+        <div class="logo-section" style="text-align: center; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); color: white;">
+            <h2 style="color: white;">Need More?</h2>
+            <p style="color: rgba(255,255,255,0.9);">Check BRAND_GUIDE.md for complete brand guidelines, AI prompts, and conversion instructions</p>
+            <a href="/BRAND_GUIDE.md" target="_blank" style="background: white; color: #2563eb;" class="download-btn">View Brand Guide</a>
+        </div>
+    </div>
+</body>
+</html>
