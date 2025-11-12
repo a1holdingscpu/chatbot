@@ -12,12 +12,26 @@ from analyzer_service import analyze_deals_from_excel, compute_base_metrics, sco
 
 def download_file_from_url(url: str) -> str:
     """Download file from URL and return temp file path"""
-    response = requests.get(url, timeout=30, stream=True)
+    # Add headers to handle redirects and simulate browser
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    response = requests.get(url, timeout=30, stream=True, headers=headers, allow_redirects=True)
     response.raise_for_status()
     
+    # Check if we got HTML instead of a file
+    content_type = response.headers.get('content-type', '').lower()
+    
+    # If content type is HTML, the URL might be a webpage not a direct file
+    if 'text/html' in content_type:
+        raise ValueError(
+            "URL returned HTML instead of a file. Please ensure the URL is a direct link to the file, "
+            "not a download page. For Google Drive/Dropbox, use direct download links."
+        )
+    
     # Get file extension from URL or content-type
-    content_type = response.headers.get('content-type', '')
-    if 'spreadsheet' in content_type or url.endswith('.xlsx'):
+    if 'spreadsheet' in content_type or 'excel' in content_type or url.endswith('.xlsx'):
         ext = '.xlsx'
     elif url.endswith('.xls'):
         ext = '.xls'
@@ -26,12 +40,34 @@ def download_file_from_url(url: str) -> str:
     elif 'json' in content_type or url.endswith('.json'):
         ext = '.json'
     else:
-        ext = '.xlsx'  # default
+        # Try to guess from URL path
+        from urllib.parse import urlparse
+        path = urlparse(url).path
+        if path.endswith('.xlsx'):
+            ext = '.xlsx'
+        elif path.endswith('.xls'):
+            ext = '.xls'
+        elif path.endswith('.csv'):
+            ext = '.csv'
+        elif path.endswith('.json'):
+            ext = '.json'
+        else:
+            ext = '.xlsx'  # default
     
     # Save to temp file
     with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp_file:
+        total_size = 0
         for chunk in response.iter_content(chunk_size=8192):
             tmp_file.write(chunk)
+            total_size += len(chunk)
+        
+        # Validate file size
+        if total_size == 0:
+            raise ValueError("Downloaded file is empty")
+        
+        if total_size < 100 and ext in ['.xlsx', '.xls']:
+            raise ValueError("Downloaded file is too small to be a valid Excel file")
+        
         return tmp_file.name
 
 def analyze_from_url(url: str, file_type: str = 'excel') -> pd.DataFrame:
