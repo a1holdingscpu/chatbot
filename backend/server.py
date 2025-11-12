@@ -167,7 +167,7 @@ async def root():
 async def login(request: LoginRequest):
     """Authenticate user and return JWT token"""
     try:
-        user = auth_service.authenticate_user(request.email, request.password, db)
+        user = await auth_service.authenticate_user(request.email, request.password, db)
         
         if not user:
             raise HTTPException(status_code=401, detail="Invalid email or password")
