@@ -280,6 +280,201 @@ async def get_ai_analysis(deal_id: str):
         logger.error(f"Error in AI analysis: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error generating AI analysis: {str(e)}")
 
+# Payment endpoints
+REPORT_PACKAGES = {
+    "premium_report": 25.00  # $25 for comprehensive report with comps
+}
+
+@api_router.post("/payments/create-checkout")
+async def create_payment_checkout(request: PaymentRequest):
+    """Create Stripe checkout session for report purchase"""
+    try:
+        # Validate deal exists
+        deal = await db.deals.find_one({"id": request.deal_id}, {"_id": 0})
+        if not deal:
+            raise HTTPException(status_code=404, detail="Deal not found")
+        
+        # Get fixed package price (NEVER from frontend)
+        amount = REPORT_PACKAGES["premium_report"]
+        
+        # Initialize Stripe with webhook URL
+        stripe_api_key = os.getenv('STRIPE_API_KEY')
+        webhook_url = f"{request.origin_url}/api/webhook/stripe"
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url=webhook_url)
+        
+        # Create success and cancel URLs
+        success_url = f"{request.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{request.origin_url}/deals"
+        
+        # Create checkout session
+        checkout_request = CheckoutSessionRequest(
+            amount=float(amount),  # Keep as float
+            currency="usd",
+            success_url=success_url,
+            cancel_url=cancel_url,
+            metadata={
+                "deal_id": request.deal_id,
+                "product_type": "premium_report",
+                "deal_address": deal.get('address', 'N/A')
+            }
+        )
+        
+        session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
+        
+        # Create payment transaction record BEFORE redirect
+        transaction = {
+            "session_id": session.session_id,
+            "deal_id": request.deal_id,
+            "amount": amount,
+            "currency": "usd",
+            "payment_status": "pending",
+            "status": "initiated",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "metadata": checkout_request.metadata
+        }
+        
+        await db.payment_transactions.insert_one(transaction)
+        logger.info(f"Created payment session {session.session_id} for deal {request.deal_id}")
+        
+        return {"url": session.url, "session_id": session.session_id}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating checkout: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating payment: {str(e)}")
+
+@api_router.get("/payments/status/{session_id}")
+async def get_payment_status(session_id: str):
+    """Get payment status and update database"""
+    try:
+        # Initialize Stripe
+        stripe_api_key = os.getenv('STRIPE_API_KEY')
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url="")
+        
+        # Get status from Stripe
+        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+        
+        # Check if already processed to avoid double processing
+        transaction = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+        
+        if not transaction:
+            raise HTTPException(status_code=404, detail="Transaction not found")
+        
+        # Only update if status changed and not already marked as paid
+        if transaction.get('payment_status') != 'paid' and status.payment_status == 'paid':
+            # Update transaction status
+            await db.payment_transactions.update_one(
+                {"session_id": session_id},
+                {
+                    "$set": {
+                        "payment_status": status.payment_status,
+                        "status": status.status,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                }
+            )
+            logger.info(f"Payment {session_id} marked as paid")
+        
+        return {
+            "session_id": session_id,
+            "payment_status": status.payment_status,
+            "status": status.status,
+            "deal_id": status.metadata.get('deal_id'),
+            "can_download": status.payment_status == 'paid'
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error checking payment status: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error checking payment: {str(e)}")
+
+@api_router.post("/payments/download-report")
+async def download_report(request: DownloadRequest):
+    """Download report after successful payment"""
+    try:
+        # Verify payment was completed
+        transaction = await db.payment_transactions.find_one(
+            {"session_id": request.session_id},
+            {"_id": 0}
+        )
+        
+        if not transaction:
+            raise HTTPException(status_code=404, detail="Transaction not found")
+        
+        if transaction.get('payment_status') != 'paid':
+            raise HTTPException(status_code=403, detail="Payment not completed")
+        
+        # Get the deal
+        deal_id = transaction.get('deal_id')
+        deal = await db.deals.find_one({"id": deal_id}, {"_id": 0})
+        
+        if not deal:
+            raise HTTPException(status_code=404, detail="Deal not found")
+        
+        # Get AI analysis if available
+        ai_service = AIAnalysisService()
+        try:
+            ai_analysis = await ai_service.analyze_deal(deal)
+        except:
+            ai_analysis = None
+        
+        # Generate report
+        report_service = ReportService()
+        excel_bytes = report_service.generate_deal_report(deal, ai_analysis)
+        
+        # Create filename
+        address = deal.get('address', 'deal').replace(' ', '_').replace(',', '')
+        filename = f"DealIQ_Report_{address}_{datetime.now().strftime('%Y%m%d')}.xlsx"
+        
+        logger.info(f"Generated report for deal {deal_id}, session {request.session_id}")
+        
+        # Return as downloadable file
+        return StreamingResponse(
+            io.BytesIO(excel_bytes),
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating report: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating report: {str(e)}")
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhooks"""
+    try:
+        body = await request.body()
+        signature = request.headers.get("Stripe-Signature")
+        
+        stripe_api_key = os.getenv('STRIPE_API_KEY')
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url="")
+        
+        webhook_response = await stripe_checkout.handle_webhook(body, signature)
+        
+        # Update transaction if payment succeeded
+        if webhook_response.payment_status == 'paid':
+            await db.payment_transactions.update_one(
+                {"session_id": webhook_response.session_id},
+                {
+                    "$set": {
+                        "payment_status": "paid",
+                        "status": "completed",
+                        "webhook_received_at": datetime.now(timezone.utc).isoformat()
+                    }
+                }
+            )
+            logger.info(f"Webhook processed: Payment {webhook_response.session_id} confirmed")
+        
+        return {"status": "success"}
+        
+    except Exception as e:
+        logger.error(f"Webhook error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+
 # Include the router in the main app
 app.include_router(api_router)
 
