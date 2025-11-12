@@ -38,13 +38,7 @@
   </g>
   
   <!-- DealiQ Text -->
-  <text x="200" y="300" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">
+  <text x="200" y="310" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="white" text-anchor="middle">
     DealiQ
-  </text>
-  
-  <!-- Pro Badge -->
-  <rect x="170" y="315" width="60" height="25" fill="white" rx="12"/>
-  <text x="200" y="333" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2563eb" text-anchor="middle">
-    PRO
   </text>
 </svg>
