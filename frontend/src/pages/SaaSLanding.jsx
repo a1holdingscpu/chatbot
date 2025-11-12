@@ -397,9 +397,9 @@ export default function SaaSLanding() {
                   )}
                 </div>
                 {plan.stripeBuyButton ? (
-                  <div className="mb-6" data-testid="stripe-buy-button">
+                  <div className="mb-6" data-testid={`stripe-buy-button-${plan.name.toLowerCase()}`}>
                     <stripe-buy-button
-                      buy-button-id="buy_btn_1SSUq5BgzLEFvozzksgqTg00"
+                      buy-button-id={plan.stripeBuyButtonId}
                       publishable-key="pk_live_51SSTnVBgzLEFvozzZLSce2x3zFnoMqx3SBGJVeuYM0y8dLETcozDAOWFLXil18lxARueT9gjupFhhSoEKrmVQWcm00Y9MF05LG"
                     >
                     </stripe-buy-button>
