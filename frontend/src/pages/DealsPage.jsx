@@ -11,7 +11,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Search, Filter, SortAsc, SortDesc, Eye, TrendingUp, TrendingDown, Sparkles, FileSpreadsheet } from 'lucide-react';
 import { toast } from 'sonner';
 import AIAnalysisDialog from '../components/AIAnalysisDialog';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export default function DealsPage() {
   const [deals, setDeals] = useState([]);
