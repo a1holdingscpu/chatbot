@@ -12,7 +12,7 @@ import LoginPage from './pages/LoginPage';
 import ClientDashboard from './pages/ClientDashboard';
 import DealsPage from './pages/DealsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import UploadPage from './pages/UploadPage';
+import UploadPage from './pages/UploadPageNew';
 import PaymentSuccess from './pages/PaymentSuccess';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
