@@ -586,9 +586,18 @@ class MLSImportRequest(BaseModel):
     property_ids: List[str]
 
 @api_router.post("/mls/search")
-async def search_mls_properties(request: MLSSearchRequest):
-    """Search MLS properties - Enterprise users only"""
+async def search_mls_properties(
+    request: MLSSearchRequest,
+    user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Search MLS properties - Enterprise users with MLS access only"""
     try:
+        # Check MLS access
+        if not auth_service.has_mls_access(user, request.state):
+            raise HTTPException(
+                status_code=403,
+                detail=f"MLS access not available for your state ({user.get('state', 'N/A')}). Contact support for access."
+            )
         # Initialize MLS service
         mls_service = MLSService()
         
