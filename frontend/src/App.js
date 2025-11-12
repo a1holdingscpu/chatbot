@@ -54,7 +54,6 @@ function Navigation() {
             <div className="bg-white text-blue-600 font-bold text-xl px-3 py-1 rounded">
               DealiQ
             </div>
-            <span className="text-xl font-semibold">Pro</span>
           </Link>
           
           <div className="flex items-center space-x-1">
