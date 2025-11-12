@@ -95,7 +95,9 @@ export default function SaaSLanding() {
           "API access"
         ],
         cta: "Start Free Trial",
-        popular: true
+        popular: true,
+        stripeBuyButton: true,
+        stripeBuyButtonId: "buy_btn_1SSUsfBgzLEFvozzuKHtoNNv"
       },
       {
         name: "Enterprise",
