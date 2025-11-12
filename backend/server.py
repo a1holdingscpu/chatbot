@@ -134,6 +134,29 @@ class ManualDealRequest(BaseModel):
     occupancy_pct: Optional[float] = 100
     notes: Optional[str] = None
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class LoginResponse(BaseModel):
+    success: bool
+    token: str
+    user: Dict[str, Any]
+
+# Security
+security = HTTPBearer()
+auth_service = AuthService()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Dict[str, Any]:
+    """Dependency to get current authenticated user"""
+    token = credentials.credentials
+    user = auth_service.verify_token(token)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    return user
+
 
 # Routes
 @api_router.get("/")
