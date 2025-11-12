@@ -352,6 +352,15 @@ export default function UploadPageNew() {
                     onChange={(e) => setImportUrl(e.target.value)}
                     className="mt-2"
                   />
+                  <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p className="text-xs text-blue-800 font-semibold mb-1">💡 URL Requirements:</p>
+                    <ul className="text-xs text-blue-700 space-y-1 ml-4 list-disc">
+                      <li>Must be a <strong>direct download link</strong> to the file</li>
+                      <li>Google Drive: Use <code className="bg-white px-1 rounded">export?format=xlsx</code> link</li>
+                      <li>Dropbox: Add <code className="bg-white px-1 rounded">?dl=1</code> at the end</li>
+                      <li>Example: https://example.com/myfile.xlsx</li>
+                    </ul>
+                  </div>
                 </div>
 
                 <div>
