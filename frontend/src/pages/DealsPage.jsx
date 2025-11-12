@@ -273,6 +273,18 @@ export default function DealsPage() {
                           >
                             <Sparkles className="h-4 w-4" />
                           </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setPurchaseDeal(deal);
+                              setShowPurchaseDialog(true);
+                            }}
+                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                            data-testid={`purchase-report-${deal.id}`}
+                          >
+                            <FileSpreadsheet className="h-4 w-4" />
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
