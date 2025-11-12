@@ -153,13 +153,14 @@ inkscape logo.svg --export-pdf=logo.pdf
 
 ## Contact Information (for materials)
 
-**Company**: DealiQ Pro  
+**Company**: DealiQ  
 **Website**: [Your domain]  
 **Email**: dealiq1@gmail.com  
 **Tagline**: Real Estate Deal Intelligence  
 
 ## Version History
 
+- **v1.1** (2025): Simplified brand to "DealiQ" (removed "Pro")
 - **v1.0** (2025): Initial brand identity created
 - Square logo, horizontal logo, white variant
 - Blue-purple gradient theme established
