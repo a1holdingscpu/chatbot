@@ -643,18 +643,45 @@ class DealiQBackendTester:
         print(f"🚀 Starting DealiQ Pro Backend API Tests")
         print(f"📍 Backend URL: {self.base_url}")
         print(f"📁 Test Excel File: {TEST_EXCEL_FILE}")
+        print(f"🔐 Admin Email: {ADMIN_EMAIL}")
         print("=" * 60)
         
-        # Test sequence based on priority
+        # Test sequence based on priority - Authentication first, then features
         test_sequence = [
+            # Core API
             ("Root Endpoint", self.test_root_endpoint),
+            
+            # Authentication System (NEW)
+            ("Admin Login", self.test_admin_login),
+            ("Verify Token", self.test_verify_token),
+            
+            # User Management (NEW) - Admin only
+            ("Create User", self.test_create_user),
+            ("List Users", self.test_list_users),
+            
+            # Enhanced Upload Endpoints (NEW)
+            ("Upload URL", self.test_upload_url),
+            ("Upload CSV", self.test_upload_csv),
+            ("Upload JSON", self.test_upload_json),
+            ("Manual Deal Creation", self.test_manual_deal_creation),
+            
+            # Original Excel Upload (Existing)
             ("Excel Upload", self.test_excel_upload),
+            
+            # Deal Management (Existing)
             ("Get All Deals", self.test_get_all_deals),
             ("Get Single Deal", self.test_get_single_deal),
             ("Get Stats", self.test_get_stats),
+            
+            # MLS Integration (NEW)
+            ("MLS Search", self.test_mls_search),
+            
+            # AI and Payment Features (Existing)
             ("AI Analysis", self.test_ai_analysis),
             ("Create Checkout", self.test_create_checkout),
             ("Payment Status", self.test_payment_status),
+            
+            # Cleanup
             ("Clear Deals", self.test_clear_deals)
         ]
         
