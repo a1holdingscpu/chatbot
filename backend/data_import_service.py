@@ -43,7 +43,38 @@ def analyze_from_url(url: str, file_type: str = 'excel') -> pd.DataFrame:
     
     try:
         if file_type == 'excel' or temp_path.endswith(('.xlsx', '.xls')):
-            df = analyze_deals_from_excel(temp_path)
+            # Determine engine based on file extension
+            if temp_path.endswith('.xlsx'):
+                engine = 'openpyxl'
+            elif temp_path.endswith('.xls'):
+                engine = 'xlrd'
+            else:
+                engine = 'openpyxl'  # default for excel
+            
+            # Read Excel with explicit engine
+            df = pd.read_excel(temp_path, sheet_name=0, engine=engine)
+            
+            # Process using same logic as analyze_deals_from_excel
+            df.columns = [c.strip().lower().replace(" ", "_").replace("-", "_") for c in df.columns]
+            
+            # Map common column names
+            col_map = {
+                "price_usd": "price",
+                "list_price": "price",
+                "monthly_rent_usd": "monthly_rent",
+                "arv_usd": "arv",
+                "rehab_est": "estimated_rehab",
+                "beds": "beds",
+                "baths": "baths",
+                "sq_ft": "sqft"
+            }
+            
+            for k, v in col_map.items():
+                if k in df.columns and v not in df.columns:
+                    df[v] = df[k]
+            
+            # Process dataframe
+            df = process_dataframe(df)
         elif file_type == 'csv' or temp_path.endswith('.csv'):
             df = analyze_from_csv_file(temp_path)
         elif file_type == 'json' or temp_path.endswith('.json'):
