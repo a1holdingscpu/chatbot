@@ -90,6 +90,7 @@ export default function SaaSLanding() {
         features: [
           "Analyze unlimited deals",
           "Advanced analytics dashboard",
+          "AI-powered deal scoring",
           "Strategy recommendations",
           "Portfolio tracking",
           "Priority email support",
@@ -107,6 +108,8 @@ export default function SaaSLanding() {
         description: "For investment firms and large portfolios",
         features: [
           "Everything in Professional",
+          "🔥 MLS Integration (State-based)",
+          "Live property search & import",
           "White-label option",
           "Custom integrations",
           "Dedicated account manager",
