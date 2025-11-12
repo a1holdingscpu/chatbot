@@ -842,13 +842,20 @@ class DealiQBackendTester:
             
             # MLS Integration (NEW)
             ("MLS Search", self.test_mls_search),
+            ("MLS Property Details", self.test_mls_property_details),
+            ("MLS Import", self.test_mls_import),
             
             # AI and Payment Features (Existing)
             ("AI Analysis", self.test_ai_analysis),
             ("Create Checkout", self.test_create_checkout),
             ("Payment Status", self.test_payment_status),
+            ("Download Report", self.test_download_report),
+            ("Stripe Webhook", self.test_stripe_webhook),
             
-            # Cleanup
+            # User Management Cleanup
+            ("Delete User", self.test_delete_user),
+            
+            # Data Cleanup
             ("Clear Deals", self.test_clear_deals)
         ]
         
