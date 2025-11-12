@@ -11,6 +11,7 @@ import ClientDashboard from './pages/ClientDashboard';
 import DealsPage from './pages/DealsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import UploadPage from './pages/UploadPage';
+import PaymentSuccess from './pages/PaymentSuccess';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
