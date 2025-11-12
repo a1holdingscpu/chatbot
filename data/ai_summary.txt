@@ -1,0 +1,15 @@
+DealIQ Pro - Top Deals Summary
+==============================
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+15 | (no address) | $0 | Strategy: hold | CapRate: 0.00%
+
+Brief insights:
+Average deal score: 15.0
