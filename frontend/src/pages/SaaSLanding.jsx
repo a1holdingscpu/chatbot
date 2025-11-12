@@ -220,9 +220,9 @@ export default function SaaSLanding() {
               <a href="#features" className="text-gray-600 hover:text-blue-600 transition font-medium">Features</a>
               <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition font-medium">Pricing</a>
               <a href="#testimonials" className="text-gray-600 hover:text-blue-600 transition font-medium">Testimonials</a>
-              <Button variant="ghost" onClick={() => navigate('/dashboard')}>Sign In</Button>
+              <Button variant="ghost" onClick={() => navigate('/login')}>Sign In</Button>
               <Button 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/login')}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white"
               >
                 Try Free Demo
