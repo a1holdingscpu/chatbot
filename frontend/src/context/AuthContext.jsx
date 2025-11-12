@@ -1,4 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
 const AuthContext = createContext(null);
 
@@ -12,54 +15,97 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is already logged in
+    const storedToken = localStorage.getItem('dealiq_token');
     const storedUser = localStorage.getItem('dealiq_user');
-    if (storedUser) {
+    
+    if (storedToken && storedUser) {
+      setToken(storedToken);
       setUser(JSON.parse(storedUser));
+      
+      // Verify token is still valid
+      verifyToken(storedToken);
     }
     setLoading(false);
   }, []);
 
-  const login = (username, password) => {
-    // Demo credentials
-    const validCredentials = [
-      { username: 'demo', password: 'demo123', name: 'Demo User', email: 'demo@dealiq.com', plan: 'Professional' },
-      { username: 'admin', password: 'admin123', name: 'Admin User', email: 'admin@dealiq.com', plan: 'Enterprise' },
-      { username: 'test', password: 'test123', name: 'Test User', email: 'test@dealiq.com', plan: 'Starter' }
-    ];
-
-    const user = validCredentials.find(
-      cred => cred.username === username && cred.password === password
-    );
-
-    if (user) {
-      const userData = {
-        name: user.name,
-        email: user.email,
-        plan: user.plan,
-        username: user.username
-      };
-      setUser(userData);
-      localStorage.setItem('dealiq_user', JSON.stringify(userData));
-      return { success: true };
+  const verifyToken = async (authToken) => {
+    try {
+      const response = await axios.get(`${API}/auth/verify`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      
+      if (response.data.success) {
+        setUser(response.data.user);
+        localStorage.setItem('dealiq_user', JSON.stringify(response.data.user));
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      logout();
     }
+  };
 
-    return { success: false, error: 'Invalid username or password' };
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post(`${API}/auth/login`, {
+        email,
+        password
+      });
+
+      if (response.data.success) {
+        const { token: authToken, user: userData } = response.data;
+        
+        setToken(authToken);
+        setUser(userData);
+        
+        localStorage.setItem('dealiq_token', authToken);
+        localStorage.setItem('dealiq_user', JSON.stringify(userData));
+        
+        // Set default authorization header for all future requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+        
+        return { success: true };
+      }
+
+      return { success: false, error: 'Login failed' };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Invalid email or password' 
+      };
+    }
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem('dealiq_user');
+    localStorage.removeItem('dealiq_token');
+    delete axios.defaults.headers.common['Authorization'];
   };
+
+  // Set authorization header if token exists
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, [token]);
 
   const value = {
     user,
+    token,
     login,
     logout,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user && !!token,
     loading
   };
 
