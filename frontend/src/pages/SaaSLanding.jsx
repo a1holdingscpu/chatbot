@@ -114,7 +114,9 @@ export default function SaaSLanding() {
           "Phone support"
         ],
         cta: "Contact Sales",
-        popular: false
+        popular: false,
+        stripeBuyButton: true,
+        stripeBuyButtonId: "buy_btn_1SSUvuBgzLEFvozzAJfRSKHT"
       }
     ],
     annual: [
