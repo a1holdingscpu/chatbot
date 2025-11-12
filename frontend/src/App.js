@@ -23,7 +23,7 @@ function Navigation() {
         <div className="flex items-center justify-between h-16">
           <Link to="/dashboard" className="flex items-center space-x-3">
             <div className="bg-white text-blue-600 font-bold text-xl px-3 py-1 rounded">
-              DealIQ
+              DealiQ
             </div>
             <span className="text-xl font-semibold">Pro</span>
           </Link>

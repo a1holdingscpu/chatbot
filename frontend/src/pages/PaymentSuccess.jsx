@@ -73,7 +73,7 @@ export default function PaymentSuccess() {
       const contentDisposition = response.headers['content-disposition'];
       const filename = contentDisposition
         ? contentDisposition.split('filename=')[1].replace(/"/g, '')
-        : 'DealIQ_Report.xlsx';
+        : 'DealiQ_Report.xlsx';
       
       link.setAttribute('download', filename);
       document.body.appendChild(link);

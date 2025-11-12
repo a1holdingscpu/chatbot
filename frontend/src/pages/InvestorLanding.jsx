@@ -132,7 +132,7 @@ export default function InvestorLanding() {
       name: "Robert Martinez",
       role: "Private Lender",
       amount: "$500K Deployed",
-      quote: "I've funded 8 deals with DealIQ. Every loan has been repaid on time with the promised returns. Professional operation.",
+      quote: "I've funded 8 deals with DealiQ. Every loan has been repaid on time with the promised returns. Professional operation.",
       returns: "14.2% average return"
     },
     {
@@ -173,7 +173,7 @@ export default function InvestorLanding() {
                 <Home className="w-6 h-6 text-white" />
               </div>
               <div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">DealIQ</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">DealiQ</span>
                 <div className="text-xs text-gray-500">Investor Portal</div>
               </div>
             </div>
@@ -393,7 +393,7 @@ export default function InvestorLanding() {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <Home className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold text-white">DealIQ</span>
+                <span className="text-2xl font-bold text-white">DealiQ</span>
               </div>
               <p className="text-sm mb-6 max-w-md">
                 Professional real estate investment firm focused on high-ROI opportunities in Phoenix Metro and nationwide markets. 
@@ -413,7 +413,7 @@ export default function InvestorLanding() {
             <div>
               <h4 className="text-white font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">About DealIQ</a></li>
+                <li><a href="#" className="hover:text-white transition">About DealiQ</a></li>
                 <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
               </ul>
             </div>
@@ -421,7 +421,7 @@ export default function InvestorLanding() {
           
           <div className="border-t border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center text-sm">
-              <p>&copy; 2025 DealIQ Investment Group, LLC. All rights reserved.</p>
+              <p>&copy; 2025 DealiQ Investment Group, LLC. All rights reserved.</p>
             </div>
             <div className="mt-4 text-xs text-gray-500 text-center md:text-left">
               <p>This is a demo platform for investor presentations. Past performance does not guarantee future results.</p>

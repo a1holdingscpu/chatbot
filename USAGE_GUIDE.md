@@ -1,4 +1,4 @@
-# DealIQ Pro - Usage Guide
+# DealiQ Pro - Usage Guide
 
 ## Quick Start
 
@@ -170,7 +170,7 @@ Open your browser and navigate to the application URL. You'll see the Dashboard 
 - Sort by ARV spread for flips
 
 ### 3. Due Diligence
-- Use DealIQ scores as a starting point
+- Use DealiQ scores as a starting point
 - Always verify with local market data
 - Inspect properties in person
 - Consult with local professionals
@@ -234,4 +234,4 @@ For additional help:
 
 ---
 
-**Remember:** DealIQ Pro provides analysis and recommendations, but always conduct your own due diligence before making investment decisions.
+**Remember:** DealiQ Pro provides analysis and recommendations, but always conduct your own due diligence before making investment decisions.

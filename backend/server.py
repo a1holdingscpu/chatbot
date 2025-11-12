@@ -102,7 +102,7 @@ class DownloadRequest(BaseModel):
 # Routes
 @api_router.get("/")
 async def root():
-    return {"message": "DealIQ Pro API - Real Estate Deal Analyzer"}
+    return {"message": "DealiQ Pro API - Real Estate Deal Analyzer"}
 
 @api_router.post("/upload", response_model=UploadResponse)
 async def upload_and_analyze(file: UploadFile = File(...)):
@@ -426,7 +426,7 @@ async def download_report(request: DownloadRequest):
         
         # Create filename
         address = deal.get('address', 'deal').replace(' ', '_').replace(',', '')
-        filename = f"DealIQ_Report_{address}_{datetime.now().strftime('%Y%m%d')}.xlsx"
+        filename = f"DealiQ_Report_{address}_{datetime.now().strftime('%Y%m%d')}.xlsx"
         
         logger.info(f"Generated report for deal {deal_id}, session {request.session_id}")
         

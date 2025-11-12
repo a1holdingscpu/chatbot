@@ -40,7 +40,7 @@ df["is_top_deal"] = df["deal_score"] >= int(os.getenv("MIN_DEAL_SCORE","70"))
 df["imported_at"] = pd.Timestamp.now()
 df.to_csv(out_csv, index=False)
 topn = df.sort_values("deal_score", ascending=False).head(10)
-lines = ["DealIQ Pro - Top Deals Summary","=============================="]
+lines = ["DealiQ Pro - Top Deals Summary","=============================="]
 for i, row in topn.iterrows():
     lines.append(f"{int(row.deal_score)} | {row.get('address','(no address)')} | ${row.get('price',0):,.0f} | Strategy: {row.get('preferred_strategy')} | CapRate: {row.get('cap_rate'):.2f}%")
 lines.append("")    

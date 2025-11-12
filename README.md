@@ -1,7 +1,7 @@
-# DealIQ Pro - Real Estate Deal Analyzer & Investor Portal
+# DealiQ Pro - Real Estate Deal Analyzer & Investor Portal
 
 ## Overview
-DealIQ Pro is a complete real estate investment platform combining a **public-facing investor portal** with a powerful **internal deal analysis tool**. 
+DealiQ Pro is a complete real estate investment platform combining a **public-facing investor portal** with a powerful **internal deal analysis tool**. 
 
 ### Two Integrated Applications:
 
@@ -81,7 +81,7 @@ Your Excel file should include columns such as:
 
 ## Deal Scoring
 
-DealIQ Pro uses different scoring algorithms based on property type:
+DealiQ Pro uses different scoring algorithms based on property type:
 
 **Residential** (0-100):
 - Cap Rate (30 points)
@@ -180,7 +180,7 @@ yarn start
 
 ## License
 
-Proprietary - DealIQ Pro
+Proprietary - DealiQ Pro
 
 ## Support
 

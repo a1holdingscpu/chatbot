@@ -62,7 +62,7 @@ export default function Dashboard() {
     <div className="container mx-auto px-4 py-8" data-testid="dashboard">
       {/* Hero Section */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to DealIQ Pro</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to DealiQ Pro</h1>
         <p className="text-lg text-gray-600">Intelligent Real Estate Deal Analysis & Investment Insights</p>
       </div>
 

@@ -393,7 +393,7 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-sm text-gray-700">Access our resources to get the most out of DealIQ Pro</p>
+                <p className="text-sm text-gray-700">Access our resources to get the most out of DealiQ Pro</p>
                 <div className="space-y-2">
                   <Button variant="outline" className="w-full justify-start" onClick={() => window.open('#', '_blank')}>
                     <FileSpreadsheet className="mr-2 h-4 w-4" />

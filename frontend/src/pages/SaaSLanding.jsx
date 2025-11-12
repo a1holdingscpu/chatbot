@@ -157,14 +157,14 @@ export default function SaaSLanding() {
       name: "Sarah Johnson",
       role: "Real Estate Investor",
       company: "Phoenix Properties LLC",
-      quote: "DealIQ Pro has completely transformed how I analyze deals. What used to take me hours now takes minutes. The scoring system is incredibly accurate.",
+      quote: "DealiQ Pro has completely transformed how I analyze deals. What used to take me hours now takes minutes. The scoring system is incredibly accurate.",
       rating: 5
     },
     {
       name: "Michael Chen",
       role: "Portfolio Manager",
       company: "Southwest Investments",
-      quote: "We analyze 200+ deals per month. DealIQ Pro's bulk upload and filtering features have been a game-changer for our team's efficiency.",
+      quote: "We analyze 200+ deals per month. DealiQ Pro's bulk upload and filtering features have been a game-changer for our team's efficiency.",
       rating: 5
     },
     {
@@ -186,7 +186,7 @@ export default function SaaSLanding() {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <Home className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">DealIQ Pro</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">DealiQ Pro</span>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
@@ -467,10 +467,10 @@ export default function SaaSLanding() {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <Home className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">DealIQ Pro</span>
+              <span className="text-xl font-bold text-white">DealiQ Pro</span>
             </div>
             <div className="text-sm">
-              &copy; 2025 DealIQ Pro. All rights reserved.
+              &copy; 2025 DealiQ Pro. All rights reserved.
             </div>
           </div>
         </div>
