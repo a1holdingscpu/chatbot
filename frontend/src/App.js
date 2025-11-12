@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import '@/App.css';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import SaaSLanding from './pages/SaaSLanding';
+import LoginPage from './pages/LoginPage';
 import ClientDashboard from './pages/ClientDashboard';
 import DealsPage from './pages/DealsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
