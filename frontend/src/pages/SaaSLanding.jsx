@@ -129,7 +129,8 @@ export default function SaaSLanding() {
         ],
         cta: "Start Free Trial",
         popular: false,
-        savings: "Save $120/year"
+        savings: "Save $120/year",
+        stripeBuyButton: true
       },
       {
         name: "Professional",
