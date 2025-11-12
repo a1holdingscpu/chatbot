@@ -111,46 +111,6 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
-
-            {/* Demo Credentials */}
-            <div className="mt-6 pt-6 border-t">
-              <p className="text-sm text-gray-600 mb-3 font-semibold">Demo Accounts:</p>
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => fillDemo('demo')}
-                  className="w-full justify-start text-left"
-                >
-                  <div className="flex-1">
-                    <div className="font-semibold">Demo User</div>
-                    <div className="text-xs text-gray-500">demo / demo123 • Professional Plan</div>
-                  </div>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => fillDemo('admin')}
-                  className="w-full justify-start text-left"
-                >
-                  <div className="flex-1">
-                    <div className="font-semibold">Admin User</div>
-                    <div className="text-xs text-gray-500">admin / admin123 • Enterprise Plan</div>
-                  </div>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => fillDemo('test')}
-                  className="w-full justify-start text-left"
-                >
-                  <div className="flex-1">
-                    <div className="font-semibold">Test User</div>
-                    <div className="text-xs text-gray-500">test / test123 • Starter Plan</div>
-                  </div>
-                </Button>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
