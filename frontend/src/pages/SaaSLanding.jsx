@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Home, DollarSign, BarChart3, Zap, Target, Check, Star, Upload, Filter, PieChart, FileSpreadsheet, Calculator, Clock, Shield, Users, ArrowRight, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,21 @@ import { Badge } from '@/components/ui/badge';
 export default function SaaSLanding() {
   const navigate = useNavigate();
   const [activePricing, setActivePricing] = useState('monthly');
+
+  // Load Stripe Buy Button script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://js.stripe.com/v3/buy-button.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   const features = [
     {
