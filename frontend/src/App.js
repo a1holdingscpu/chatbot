@@ -140,6 +140,7 @@ function AppContent() {
         <Route path="/mls" element={<ProtectedRoute><MLSPage /></ProtectedRoute>} />
         <Route path="/deals" element={<ProtectedRoute><DealsPage /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+        <Route path="/admin/users" element={<ProtectedRoute><AdminUsersPage /></ProtectedRoute>} />
         <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
       </Routes>
     </div>
