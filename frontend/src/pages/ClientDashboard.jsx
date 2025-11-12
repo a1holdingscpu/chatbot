@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API } from '../App';
+import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,21 +16,22 @@ import { toast } from 'sonner';
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [recentDeals, setRecentDeals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Mock user data - in real app, this would come from auth context
-  const [userData] = useState({
-    name: "John Smith",
-    email: "john@example.com",
-    plan: "Professional",
+  // User data from auth context
+  const userData = {
+    name: user?.name || "User",
+    email: user?.email || "user@dealiq.com",
+    plan: user?.plan || "Professional",
     planColor: "blue",
     dealsThisMonth: 47,
-    dealsLimit: null, // null = unlimited
+    dealsLimit: user?.plan === "Starter" ? 50 : null, // null = unlimited
     uploadsThisMonth: 8,
     memberSince: "Jan 2025"
-  });
+  };
 
   useEffect(() => {
     fetchData();
