@@ -63,12 +63,12 @@ class AuthService:
             logger.warning(f"Invalid token: {str(e)}")
             return None
     
-    def authenticate_user(self, email: str, password: str, db) -> Optional[Dict[str, Any]]:
+    async def authenticate_user(self, email: str, password: str, db) -> Optional[Dict[str, Any]]:
         """
         Authenticate a user with email and password
         Returns user data if successful, None otherwise
         """
-        # Check admin credentials from environment
+        # Check admin credentials from environment first
         admin_email = os.environ.get('ADMIN_EMAIL')
         admin_password_hash = os.environ.get('ADMIN_PASSWORD_HASH')
         admin_name = os.environ.get('ADMIN_NAME', 'Admin')
@@ -85,8 +85,20 @@ class AuthService:
                     'mls_access': True
                 }
         
-        # Future: Check database for other users
-        # user = await db.users.find_one({"email": email})
+        # Check database for Enterprise users
+        user = await db.users.find_one({"email": email}, {"_id": 0})
+        
+        if user:
+            # Verify password
+            if self.verify_password(password, user.get('password_hash', '')):
+                return {
+                    'id': user.get('id', user.get('email')),
+                    'email': user['email'],
+                    'name': user.get('name', 'User'),
+                    'plan': user.get('plan', 'Starter'),
+                    'state': user.get('state', ''),
+                    'mls_access': user.get('mls_access', False)
+                }
         
         return None
     
