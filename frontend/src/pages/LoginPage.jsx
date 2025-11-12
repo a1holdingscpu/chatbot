@@ -44,7 +44,7 @@ export default function LoginPage() {
               <Home className="w-7 h-7 text-white" />
             </div>
             <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              DealiQ Pro
+              DealiQ
             </span>
           </div>
           <p className="text-gray-600">Sign in to access your account</p>
