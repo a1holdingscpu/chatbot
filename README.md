@@ -1,7 +1,24 @@
-# DealIQ Pro - Real Estate Deal Analyzer
+# DealIQ Pro - Real Estate Deal Analyzer & Investor Portal
 
 ## Overview
-DealIQ Pro is a comprehensive real estate investment analysis platform that helps investors evaluate, score, and compare property deals. Upload Excel files with property data and get instant insights, recommendations, and financial projections.
+DealIQ Pro is a complete real estate investment platform combining a **public-facing investor portal** with a powerful **internal deal analysis tool**. 
+
+### Two Integrated Applications:
+
+**1. Investor Landing Page (`/`)** - Public Marketing Site
+- Professional investor-focused landing page
+- Live animated portfolio metrics dashboard
+- Active deal pipeline showcase
+- Company track record and performance history
+- Investment opportunity presentations
+- Call-to-action for investor engagement
+
+**2. Deal Analyzer Tool (`/analyzer/*`)** - Internal Analysis Platform
+- Upload Excel files and analyze real estate deals instantly
+- Proprietary scoring algorithm (0-100) for different property types
+- Complete financial projections and ROI calculations
+- Advanced filtering, sorting, and deal comparison
+- Portfolio analytics and performance tracking
 
 ## Features
 
