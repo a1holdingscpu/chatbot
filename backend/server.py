@@ -647,9 +647,15 @@ async def get_mls_property(
         raise HTTPException(status_code=500, detail=f"Error fetching property: {str(e)}")
 
 @api_router.post("/mls/import", response_model=UploadResponse)
-async def import_mls_properties(request: MLSImportRequest):
+async def import_mls_properties(
+    request: MLSImportRequest,
+    user: Dict[str, Any] = Depends(get_current_user)
+):
     """Import selected MLS properties as deals - Enterprise users only"""
     try:
+        # Check MLS access
+        if not auth_service.has_mls_access(user):
+            raise HTTPException(status_code=403, detail="MLS access not available")
         logger.info(f"Importing {len(request.property_ids)} properties from MLS")
         
         # Initialize MLS service
