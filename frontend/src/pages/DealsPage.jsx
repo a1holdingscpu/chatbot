@@ -281,6 +281,13 @@ export default function DealsPage() {
         </Card>
       )}
 
+      {/* AI Analysis Dialog */}
+      <AIAnalysisDialog
+        deal={aiAnalysisDeal}
+        open={showAIDialog}
+        onOpenChange={setShowAIDialog}
+      />
+
       {/* Deal Details Dialog */}
       <Dialog open={!!selectedDeal} onOpenChange={(open) => !open && setSelectedDeal(null)}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" data-testid="deal-details-dialog">
