@@ -77,7 +77,7 @@ export default function Dashboard() {
             </p>
             <Button
               size="lg"
-              onClick={() => navigate('/upload')}
+              onClick={() => navigate('/analyzer/upload')}
               className="bg-blue-600 hover:bg-blue-700"
               data-testid="get-started-upload-btn"
             >
@@ -147,7 +147,7 @@ export default function Dashboard() {
                 </div>
                 <Button
                   variant="outline"
-                  onClick={() => navigate('/deals')}
+                  onClick={() => navigate('/analyzer/deals')}
                   data-testid="view-all-deals-btn"
                 >
                   View All Deals
@@ -160,7 +160,7 @@ export default function Dashboard() {
                   <div
                     key={deal.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-                    onClick={() => navigate('/deals')}
+                    onClick={() => navigate('/analyzer/deals')}
                     data-testid={`top-deal-${deal.id}`}
                   >
                     <div className="flex-1">
@@ -190,7 +190,7 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/upload')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/analyzer/upload')}>
               <CardHeader>
                 <Upload className="h-8 w-8 text-blue-600 mb-2" />
                 <CardTitle>Upload New Deals</CardTitle>
@@ -198,7 +198,7 @@ export default function Dashboard() {
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/analytics')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/analyzer/analytics')}>
               <CardHeader>
                 <TrendingUp className="h-8 w-8 text-green-600 mb-2" />
                 <CardTitle>View Analytics</CardTitle>
