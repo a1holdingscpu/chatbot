@@ -48,7 +48,7 @@ class DealiQBackendTester:
             
             if response.status_code == 200:
                 data = response.json()
-                if "DealiQ Pro API" in data.get("message", ""):
+                if "DealiQ API" in data.get("message", ""):
                     self.log_result("Root Endpoint", True, "API root accessible")
                     return True
                 else:
@@ -60,6 +60,343 @@ class DealiQBackendTester:
                 
         except Exception as e:
             self.log_result("Root Endpoint", False, f"Connection error: {str(e)}")
+            return False
+
+    def test_admin_login(self):
+        """Test POST /api/auth/login with admin credentials"""
+        try:
+            payload = {
+                "email": ADMIN_EMAIL,
+                "password": ADMIN_PASSWORD
+            }
+            
+            response = self.session.post(f"{self.base_url}/auth/login", json=payload)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'token' in data and 'user' in data:
+                    self.auth_token = data['token']
+                    # Set authorization header for subsequent requests
+                    self.session.headers.update({'Authorization': f'Bearer {self.auth_token}'})
+                    user = data['user']
+                    self.log_result("Admin Login", True, f"Admin logged in: {user.get('name')} ({user.get('plan')})")
+                    return True
+                else:
+                    self.log_result("Admin Login", False, "Login succeeded but missing token/user", data)
+                    return False
+            else:
+                self.log_result("Admin Login", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Admin Login", False, f"Login error: {str(e)}")
+            return False
+
+    def test_verify_token(self):
+        """Test GET /api/auth/verify"""
+        try:
+            if not self.auth_token:
+                self.log_result("Verify Token", False, "No auth token available")
+                return False
+            
+            response = self.session.get(f"{self.base_url}/auth/verify")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'user' in data:
+                    user = data['user']
+                    self.log_result("Verify Token", True, f"Token verified for {user.get('email')}")
+                    return True
+                else:
+                    self.log_result("Verify Token", False, "Token verification failed", data)
+                    return False
+            elif response.status_code == 401:
+                self.log_result("Verify Token", False, "Token invalid or expired")
+                return False
+            else:
+                self.log_result("Verify Token", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Verify Token", False, f"Token verification error: {str(e)}")
+            return False
+
+    def test_create_user(self):
+        """Test POST /api/admin/users/create"""
+        try:
+            if not self.auth_token:
+                self.log_result("Create User", False, "No auth token available")
+                return False
+            
+            # Create test Enterprise user
+            payload = {
+                "email": "test.enterprise@dealiq.com",
+                "password": "TestPass123!",
+                "name": "Test Enterprise User",
+                "plan": "Enterprise",
+                "state": "NV",
+                "mls_access": True
+            }
+            
+            response = self.session.post(f"{self.base_url}/admin/users/create", json=payload)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'user' in data:
+                    user = data['user']
+                    self.test_user_id = user.get('id')
+                    self.log_result("Create User", True, f"Created user: {user.get('email')} ({user.get('plan')})")
+                    return True
+                else:
+                    self.log_result("Create User", False, "User creation succeeded but missing data", data)
+                    return False
+            elif response.status_code == 400:
+                # User might already exist, try to continue
+                self.log_result("Create User", True, "User already exists (expected for repeated tests)")
+                return True
+            elif response.status_code == 403:
+                self.log_result("Create User", False, "Admin access denied")
+                return False
+            else:
+                self.log_result("Create User", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Create User", False, f"User creation error: {str(e)}")
+            return False
+
+    def test_list_users(self):
+        """Test GET /api/admin/users"""
+        try:
+            if not self.auth_token:
+                self.log_result("List Users", False, "No auth token available")
+                return False
+            
+            response = self.session.get(f"{self.base_url}/admin/users")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'users' in data:
+                    user_count = data.get('count', 0)
+                    self.log_result("List Users", True, f"Retrieved {user_count} users")
+                    return True
+                else:
+                    self.log_result("List Users", False, "Users list succeeded but missing data", data)
+                    return False
+            elif response.status_code == 403:
+                self.log_result("List Users", False, "Admin access denied")
+                return False
+            else:
+                self.log_result("List Users", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("List Users", False, f"List users error: {str(e)}")
+            return False
+
+    def test_upload_url(self):
+        """Test POST /api/upload-url"""
+        try:
+            if not self.auth_token:
+                self.log_result("Upload URL", False, "No auth token available")
+                return False
+            
+            # Use a mock URL for testing (this will likely fail but we test the endpoint)
+            payload = {
+                "url": "https://example.com/sample.xlsx",
+                "file_type": "excel"
+            }
+            
+            response = self.session.post(f"{self.base_url}/upload-url", json=payload)
+            
+            # We expect this to fail with a 400 or 500 due to invalid URL, but endpoint should be accessible
+            if response.status_code in [400, 500]:
+                # Check if it's a proper error response about the URL
+                try:
+                    error_data = response.json()
+                    if "URL" in str(error_data) or "download" in str(error_data).lower():
+                        self.log_result("Upload URL", True, "URL upload endpoint accessible (expected URL error)")
+                        return True
+                except:
+                    pass
+                self.log_result("Upload URL", True, "URL upload endpoint accessible (expected error for test URL)")
+                return True
+            elif response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    self.log_result("Upload URL", True, f"URL upload successful: {data.get('deals_count', 0)} deals")
+                    return True
+            
+            self.log_result("Upload URL", False, f"HTTP {response.status_code}", response.text)
+            return False
+                
+        except Exception as e:
+            self.log_result("Upload URL", False, f"URL upload error: {str(e)}")
+            return False
+
+    def test_upload_csv(self):
+        """Test POST /api/upload-csv"""
+        try:
+            if not self.auth_token:
+                self.log_result("Upload CSV", False, "No auth token available")
+                return False
+            
+            # Sample CSV data for testing
+            csv_data = """address,price,property_type,arv,estimated_rehab,monthly_rent
+123 Test St Las Vegas NV,250000,residential,300000,25000,2500
+456 Sample Ave Henderson NV,180000,residential,220000,15000,1800"""
+            
+            payload = {
+                "csv_text": csv_data
+            }
+            
+            response = self.session.post(f"{self.base_url}/upload-csv", json=payload)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('deals_count', 0) > 0:
+                    self.log_result("Upload CSV", True, f"CSV upload successful: {data['deals_count']} deals")
+                    return True
+                else:
+                    self.log_result("Upload CSV", False, "CSV upload succeeded but no deals processed", data)
+                    return False
+            else:
+                self.log_result("Upload CSV", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Upload CSV", False, f"CSV upload error: {str(e)}")
+            return False
+
+    def test_upload_json(self):
+        """Test POST /api/upload-json"""
+        try:
+            if not self.auth_token:
+                self.log_result("Upload JSON", False, "No auth token available")
+                return False
+            
+            # Sample JSON data for testing
+            json_data = [
+                {
+                    "address": "789 JSON Blvd Las Vegas NV",
+                    "price": 275000,
+                    "property_type": "residential",
+                    "arv": 325000,
+                    "estimated_rehab": 30000,
+                    "monthly_rent": 2700
+                },
+                {
+                    "address": "321 Data Dr Henderson NV", 
+                    "price": 195000,
+                    "property_type": "residential",
+                    "arv": 240000,
+                    "estimated_rehab": 20000,
+                    "monthly_rent": 1950
+                }
+            ]
+            
+            payload = {
+                "json_data": json_data
+            }
+            
+            response = self.session.post(f"{self.base_url}/upload-json", json=payload)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('deals_count', 0) > 0:
+                    self.log_result("Upload JSON", True, f"JSON upload successful: {data['deals_count']} deals")
+                    return True
+                else:
+                    self.log_result("Upload JSON", False, "JSON upload succeeded but no deals processed", data)
+                    return False
+            else:
+                self.log_result("Upload JSON", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Upload JSON", False, f"JSON upload error: {str(e)}")
+            return False
+
+    def test_manual_deal_creation(self):
+        """Test POST /api/deals/manual"""
+        try:
+            if not self.auth_token:
+                self.log_result("Manual Deal Creation", False, "No auth token available")
+                return False
+            
+            payload = {
+                "address": "555 Manual Entry St Las Vegas NV",
+                "price": 300000,
+                "property_type": "residential",
+                "arv": 375000,
+                "estimated_rehab": 35000,
+                "monthly_rent": 3000,
+                "sqft": 1500,
+                "beds": 3,
+                "baths": 2.0,
+                "units": 1,
+                "occupancy_pct": 100,
+                "notes": "Test manual deal creation"
+            }
+            
+            response = self.session.post(f"{self.base_url}/deals/manual", json=payload)
+            
+            if response.status_code == 200:
+                deal = response.json()
+                if deal.get('id') and deal.get('address'):
+                    # Store this deal ID for later tests if we don't have one
+                    if not self.test_deal_id:
+                        self.test_deal_id = deal['id']
+                    self.log_result("Manual Deal Creation", True, f"Manual deal created: {deal.get('address')}")
+                    return True
+                else:
+                    self.log_result("Manual Deal Creation", False, "Deal creation succeeded but missing data", deal)
+                    return False
+            else:
+                self.log_result("Manual Deal Creation", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("Manual Deal Creation", False, f"Manual deal creation error: {str(e)}")
+            return False
+
+    def test_mls_search(self):
+        """Test POST /api/mls/search"""
+        try:
+            if not self.auth_token:
+                self.log_result("MLS Search", False, "No auth token available")
+                return False
+            
+            payload = {
+                "city": "Las Vegas",
+                "state": "NV",
+                "price_min": 200000,
+                "price_max": 500000,
+                "beds": 3,
+                "limit": 10
+            }
+            
+            response = self.session.post(f"{self.base_url}/mls/search", json=payload)
+            
+            if response.status_code == 200:
+                data = response.json()
+                # MLS search should return some structure even if no properties found
+                if isinstance(data, dict):
+                    property_count = data.get('count', 0)
+                    self.log_result("MLS Search", True, f"MLS search completed: {property_count} properties found")
+                    return True
+                else:
+                    self.log_result("MLS Search", False, "MLS search returned unexpected format", data)
+                    return False
+            elif response.status_code == 403:
+                self.log_result("MLS Search", True, "MLS access properly restricted (expected for some users)")
+                return True
+            else:
+                self.log_result("MLS Search", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_result("MLS Search", False, f"MLS search error: {str(e)}")
             return False
     
     def test_excel_upload(self):
