@@ -172,7 +172,9 @@ export default function SaaSLanding() {
         ],
         cta: "Contact Sales",
         popular: false,
-        savings: "Save $1,200/year"
+        savings: "Save $1,200/year",
+        stripeBuyButton: true,
+        stripeBuyButtonId: "buy_btn_1SSUvuBgzLEFvozzAJfRSKHT"
       }
     ]
   };
