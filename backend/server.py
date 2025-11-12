@@ -161,7 +161,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 # Routes
 @api_router.get("/")
 async def root():
-    return {"message": "DealiQ Pro API - Real Estate Deal Analyzer"}
+    return {"message": "DealiQ API - Real Estate Deal Intelligence"}
 
 @api_router.post("/auth/login", response_model=LoginResponse)
 async def login(request: LoginRequest):
