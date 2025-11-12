@@ -17,6 +17,8 @@ export default function DealsPage() {
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDeal, setSelectedDeal] = useState(null);
+  const [aiAnalysisDeal, setAiAnalysisDeal] = useState(null);
+  const [showAIDialog, setShowAIDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [strategyFilter, setStrategyFilter] = useState('all');
   const [sortBy, setSortBy] = useState('deal_score');
