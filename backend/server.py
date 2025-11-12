@@ -512,6 +512,122 @@ async def create_deal_manually(request: ManualDealRequest):
         logger.error(f"Error creating manual deal: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error creating deal: {str(e)}")
 
+# MLS Integration endpoints
+class MLSSearchRequest(BaseModel):
+    city: Optional[str] = "Las Vegas"
+    state: Optional[str] = "NV"
+    zipcode: Optional[str] = None
+    price_min: Optional[float] = None
+    price_max: Optional[float] = None
+    beds: Optional[int] = None
+    baths: Optional[float] = None
+    property_type: Optional[str] = None
+    limit: int = 50
+    offset: int = 0
+
+class MLSImportRequest(BaseModel):
+    property_ids: List[str]
+
+@api_router.post("/mls/search")
+async def search_mls_properties(request: MLSSearchRequest):
+    """Search MLS properties - Enterprise users only"""
+    try:
+        # Initialize MLS service
+        mls_service = MLSService()
+        
+        # Search properties
+        result = mls_service.search_properties(
+            city=request.city,
+            state=request.state,
+            zipcode=request.zipcode,
+            price_min=request.price_min,
+            price_max=request.price_max,
+            beds=request.beds,
+            baths=request.baths,
+            property_type=request.property_type,
+            limit=request.limit,
+            offset=request.offset
+        )
+        
+        logger.info(f"MLS search completed: {result.get('count', 0)} properties found")
+        return result
+        
+    except Exception as e:
+        logger.error(f"MLS search error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"MLS search error: {str(e)}")
+
+@api_router.get("/mls/property/{mls_id}")
+async def get_mls_property(mls_id: str):
+    """Get detailed MLS property information - Enterprise users only"""
+    try:
+        mls_service = MLSService()
+        property_data = mls_service.get_property_details(mls_id)
+        
+        if not property_data:
+            raise HTTPException(status_code=404, detail="Property not found")
+        
+        return property_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching MLS property: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error fetching property: {str(e)}")
+
+@api_router.post("/mls/import", response_model=UploadResponse)
+async def import_mls_properties(request: MLSImportRequest):
+    """Import selected MLS properties as deals - Enterprise users only"""
+    try:
+        logger.info(f"Importing {len(request.property_ids)} properties from MLS")
+        
+        # Initialize MLS service
+        mls_service = MLSService()
+        
+        # Get and convert properties
+        deals_data = []
+        for prop_id in request.property_ids:
+            prop_data = mls_service.get_property_details(prop_id)
+            if prop_data:
+                deal = mls_service.convert_to_deal(prop_data)
+                
+                # Analyze the deal
+                df = create_manual_deal(deal)
+                analyzed_deal = df.to_dict('records')[0]
+                
+                # Convert numpy types
+                for key, value in analyzed_deal.items():
+                    if pd.isna(value):
+                        analyzed_deal[key] = None
+                    elif hasattr(value, 'item'):
+                        analyzed_deal[key] = value.item()
+                
+                # Add metadata
+                analyzed_deal['id'] = str(uuid.uuid4())
+                analyzed_deal['imported_at'] = datetime.now(timezone.utc).isoformat()
+                analyzed_deal['import_source'] = 'MLS - Las Vegas GLVAR'
+                
+                deals_data.append(analyzed_deal)
+        
+        # Store in MongoDB
+        if deals_data:
+            await db.deals.insert_many(deals_data)
+            logger.info(f"Stored {len(deals_data)} MLS properties in database")
+        
+        # Get top deals
+        top_deals_data = sorted(deals_data, key=lambda x: x.get('deal_score', 0), reverse=True)[:10]
+        top_deals = [Deal(**deal) for deal in top_deals_data]
+        
+        return UploadResponse(
+            success=True,
+            message=f"Successfully imported {len(deals_data)} properties from MLS",
+            deals_count=len(deals_data),
+            top_deals=top_deals
+        )
+        
+    except Exception as e:
+        logger.error(f"Error importing MLS properties: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing properties: {str(e)}")
+
 # Payment endpoints
 REPORT_PACKAGES = {
     "premium_report": 25.00  # $25 for comprehensive report with comps
