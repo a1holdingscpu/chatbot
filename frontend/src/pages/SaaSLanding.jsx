@@ -200,7 +200,7 @@ export default function SaaSLanding() {
       name: "Sarah Johnson",
       role: "Real Estate Investor",
       company: "Phoenix Properties LLC",
-      quote: "DealiQ Pro has completely transformed how I analyze deals. What used to take me hours now takes minutes. The scoring system is incredibly accurate.",
+      quote: "DealiQ has completely transformed how I analyze deals. What used to take me hours now takes minutes. The scoring system is incredibly accurate.",
       rating: 5
     },
     {
