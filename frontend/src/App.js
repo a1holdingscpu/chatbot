@@ -41,6 +41,9 @@ function ProtectedRoute({ children }) {
 function Navigation() {
   const { user, logout } = useAuth();
   
+  // Show MLS link only for Enterprise/Professional users
+  const showMLS = user && (user.plan === 'Enterprise' || user.plan === 'Professional');
+  
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
       <div className="container mx-auto px-4">
@@ -67,6 +70,15 @@ function Navigation() {
             >
               Upload
             </Link>
+            {showMLS && (
+              <Link
+                to="/mls"
+                className="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors bg-purple-600/30"
+                data-testid="nav-mls"
+              >
+                MLS Search
+              </Link>
+            )}
             <Link
               to="/deals"
               className="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
