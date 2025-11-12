@@ -311,6 +311,183 @@ async def get_ai_analysis(deal_id: str):
         logger.error(f"Error in AI analysis: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error generating AI analysis: {str(e)}")
 
+@api_router.post("/upload-url", response_model=UploadResponse)
+async def upload_from_url(request: URLImportRequest):
+    """Import deals from URL (Excel, CSV, or JSON file)"""
+    try:
+        logger.info(f"Importing deals from URL: {request.url}")
+        
+        # Download and analyze
+        df = analyze_from_url(request.url, request.file_type)
+        
+        # Convert DataFrame to dict records
+        df['imported_at'] = datetime.now(timezone.utc).isoformat()
+        deals_data = df.to_dict('records')
+        
+        # Convert numpy types to Python types
+        for deal in deals_data:
+            for key, value in deal.items():
+                if pd.isna(value):
+                    deal[key] = None
+                elif isinstance(value, (pd.Timestamp, pd.DatetimeTZDtype)):
+                    deal[key] = str(value)
+                elif hasattr(value, 'item'):  # numpy types
+                    deal[key] = value.item()
+        
+        # Add unique IDs
+        for deal in deals_data:
+            deal['id'] = str(uuid.uuid4())
+        
+        # Store in MongoDB
+        if deals_data:
+            await db.deals.insert_many(deals_data)
+            logger.info(f"Stored {len(deals_data)} deals from URL in database")
+        
+        # Get top deals
+        top_deals_data = sorted(deals_data, key=lambda x: x.get('deal_score', 0), reverse=True)[:10]
+        top_deals = [Deal(**deal) for deal in top_deals_data]
+        
+        return UploadResponse(
+            success=True,
+            message=f"Successfully imported {len(deals_data)} deals from URL",
+            deals_count=len(deals_data),
+            top_deals=top_deals
+        )
+        
+    except Exception as e:
+        logger.error(f"Error importing from URL: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing from URL: {str(e)}")
+
+@api_router.post("/upload-csv", response_model=UploadResponse)
+async def upload_from_csv(request: CSVImportRequest):
+    """Import deals from CSV text (copy/paste)"""
+    try:
+        logger.info(f"Importing deals from CSV text")
+        
+        # Analyze CSV
+        df = analyze_from_csv_text(request.csv_text)
+        
+        # Convert DataFrame to dict records
+        df['imported_at'] = datetime.now(timezone.utc).isoformat()
+        deals_data = df.to_dict('records')
+        
+        # Convert numpy types to Python types
+        for deal in deals_data:
+            for key, value in deal.items():
+                if pd.isna(value):
+                    deal[key] = None
+                elif isinstance(value, (pd.Timestamp, pd.DatetimeTZDtype)):
+                    deal[key] = str(value)
+                elif hasattr(value, 'item'):  # numpy types
+                    deal[key] = value.item()
+        
+        # Add unique IDs
+        for deal in deals_data:
+            deal['id'] = str(uuid.uuid4())
+        
+        # Store in MongoDB
+        if deals_data:
+            await db.deals.insert_many(deals_data)
+            logger.info(f"Stored {len(deals_data)} deals from CSV in database")
+        
+        # Get top deals
+        top_deals_data = sorted(deals_data, key=lambda x: x.get('deal_score', 0), reverse=True)[:10]
+        top_deals = [Deal(**deal) for deal in top_deals_data]
+        
+        return UploadResponse(
+            success=True,
+            message=f"Successfully imported {len(deals_data)} deals from CSV",
+            deals_count=len(deals_data),
+            top_deals=top_deals
+        )
+        
+    except Exception as e:
+        logger.error(f"Error importing from CSV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing from CSV: {str(e)}")
+
+@api_router.post("/upload-json", response_model=UploadResponse)
+async def upload_from_json(request: JSONImportRequest):
+    """Import deals from JSON data"""
+    try:
+        logger.info(f"Importing deals from JSON")
+        
+        # Analyze JSON
+        df = analyze_from_json(request.json_data)
+        
+        # Convert DataFrame to dict records
+        df['imported_at'] = datetime.now(timezone.utc).isoformat()
+        deals_data = df.to_dict('records')
+        
+        # Convert numpy types to Python types
+        for deal in deals_data:
+            for key, value in deal.items():
+                if pd.isna(value):
+                    deal[key] = None
+                elif isinstance(value, (pd.Timestamp, pd.DatetimeTZDtype)):
+                    deal[key] = str(value)
+                elif hasattr(value, 'item'):  # numpy types
+                    deal[key] = value.item()
+        
+        # Add unique IDs
+        for deal in deals_data:
+            deal['id'] = str(uuid.uuid4())
+        
+        # Store in MongoDB
+        if deals_data:
+            await db.deals.insert_many(deals_data)
+            logger.info(f"Stored {len(deals_data)} deals from JSON in database")
+        
+        # Get top deals
+        top_deals_data = sorted(deals_data, key=lambda x: x.get('deal_score', 0), reverse=True)[:10]
+        top_deals = [Deal(**deal) for deal in top_deals_data]
+        
+        return UploadResponse(
+            success=True,
+            message=f"Successfully imported {len(deals_data)} deals from JSON",
+            deals_count=len(deals_data),
+            top_deals=top_deals
+        )
+        
+    except Exception as e:
+        logger.error(f"Error importing from JSON: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing from JSON: {str(e)}")
+
+@api_router.post("/deals/manual", response_model=Deal)
+async def create_deal_manually(request: ManualDealRequest):
+    """Create a single deal manually"""
+    try:
+        logger.info(f"Creating manual deal for {request.address}")
+        
+        # Validate and process
+        deal_data = validate_deal_data(request.dict())
+        
+        # Analyze single deal
+        df = create_manual_deal(deal_data)
+        
+        # Convert to dict
+        df['imported_at'] = datetime.now(timezone.utc).isoformat()
+        deal = df.to_dict('records')[0]
+        
+        # Convert numpy types
+        for key, value in deal.items():
+            if pd.isna(value):
+                deal[key] = None
+            elif hasattr(value, 'item'):
+                deal[key] = value.item()
+        
+        # Add unique ID
+        deal['id'] = str(uuid.uuid4())
+        
+        # Store in MongoDB
+        await db.deals.insert_one(deal)
+        logger.info(f"Stored manual deal {deal['id']} in database")
+        
+        return Deal(**deal)
+        
+    except Exception as e:
+        logger.error(f"Error creating manual deal: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating deal: {str(e)}")
+
 # Payment endpoints
 REPORT_PACKAGES = {
     "premium_report": 25.00  # $25 for comprehensive report with comps
