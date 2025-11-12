@@ -14,6 +14,10 @@ from pathlib import Path
 BACKEND_URL = "https://property-insight-11.preview.emergentagent.com/api"
 TEST_EXCEL_FILE = "/app/data/Real_Estate_Deal_Analysis_Toolkit.xlsx"
 
+# Admin credentials for testing
+ADMIN_EMAIL = "dealiq1@gmail.com"
+ADMIN_PASSWORD = "Drivetime1#!"
+
 class DealiQBackendTester:
     def __init__(self):
         self.base_url = BACKEND_URL
@@ -22,6 +26,8 @@ class DealiQBackendTester:
         self.uploaded_deals = []
         self.test_deal_id = None
         self.test_session_id = None
+        self.auth_token = None
+        self.test_user_id = None
         
     def log_result(self, test_name, success, message, details=None):
         """Log test result"""
