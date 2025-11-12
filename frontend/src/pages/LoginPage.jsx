@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Home, Lock, User, AlertCircle } from 'lucide-react';
+import { Home, Lock, Mail, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    const result = login(username, password);
+    const result = await login(email, password);
 
     if (result.success) {
       toast.success('Login successful!');
@@ -32,19 +32,6 @@ export default function LoginPage() {
     }
 
     setLoading(false);
-  };
-
-  const fillDemo = (type) => {
-    if (type === 'demo') {
-      setUsername('demo');
-      setPassword('demo123');
-    } else if (type === 'admin') {
-      setUsername('admin');
-      setPassword('admin123');
-    } else if (type === 'test') {
-      setUsername('test');
-      setPassword('test123');
-    }
   };
 
   return (
