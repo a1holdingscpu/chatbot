@@ -389,16 +389,26 @@ export default function SaaSLanding() {
                     <div className="text-sm text-green-300 mt-2">{plan.savings}</div>
                   )}
                 </div>
-                <Button
-                  className={`w-full mb-6 ${
-                    plan.popular
-                      ? 'bg-white text-blue-600 hover:bg-gray-100'
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                  }`}
-                  onClick={() => navigate('/dashboard')}
-                >
-                  {plan.cta}
-                </Button>
+                {plan.stripeBuyButton ? (
+                  <div className="mb-6" data-testid="stripe-buy-button">
+                    <stripe-buy-button
+                      buy-button-id="buy_btn_1SSUq5BgzLEFvozzksgqTg00"
+                      publishable-key="pk_live_51SSTnVBgzLEFvozzZLSce2x3zFnoMqx3SBGJVeuYM0y8dLETcozDAOWFLXil18lxARueT9gjupFhhSoEKrmVQWcm00Y9MF05LG"
+                    >
+                    </stripe-buy-button>
+                  </div>
+                ) : (
+                  <Button
+                    className={`w-full mb-6 ${
+                      plan.popular
+                        ? 'bg-white text-blue-600 hover:bg-gray-100'
+                        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                    }`}
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    {plan.cta}
+                  </Button>
+                )}
                 <ul className="space-y-3">
                   {plan.features.map((feature, fIdx) => (
                     <li key={fIdx} className="flex items-start">
