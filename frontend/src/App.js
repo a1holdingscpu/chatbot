@@ -95,6 +95,15 @@ function Navigation() {
             >
               Analytics
             </Link>
+            {isAdmin && (
+              <Link
+                to="/admin/users"
+                className="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors bg-red-600/30"
+                data-testid="nav-admin"
+              >
+                Admin
+              </Link>
+            )}
             
             <div className="ml-4 pl-4 border-l border-white/20 flex items-center space-x-2">
               <Button
