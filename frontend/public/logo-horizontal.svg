@@ -38,11 +38,6 @@
     DealiQ
   </text>
   
-  <!-- Pro Text -->
-  <text x="480" y="115" font-family="Arial, sans-serif" font-size="48" font-weight="300" fill="#6b7280">
-    Pro
-  </text>
-  
   <!-- Tagline -->
   <text x="220" y="145" font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="#6b7280">
     Real Estate Deal Intelligence
