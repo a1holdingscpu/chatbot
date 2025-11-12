@@ -671,10 +671,11 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Login Page with real authentication"
   stuck_tasks: []
   test_all: false
-  test_priority: "completed"
+  test_priority: "branding_fix_needed"
 
 agent_communication:
     - agent: "main"
