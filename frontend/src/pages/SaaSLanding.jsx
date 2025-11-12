@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, Home, DollarSign, BarChart3, Zap, Target, Check, Star, Upload, Filter, PieChart, FileSpreadsheet, Calculator, Clock, Shield, Users, ArrowRight, Sparkles, ChevronRight } from 'lucide-react';
+import { TrendingUp, Home, DollarSign, BarChart3, Zap, Target, Check, Star, Upload, Filter, PieChart, FileSpreadsheet, Calculator, Clock, Shield, Users, ArrowRight, Sparkles, ChevronRight, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
