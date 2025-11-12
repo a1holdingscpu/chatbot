@@ -14,6 +14,7 @@ import pandas as pd
 import tempfile
 import shutil
 from analyzer_service import analyze_deals_from_excel
+from ai_analysis_service import AIAnalysisService
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
