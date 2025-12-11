@@ -1,0 +1,175 @@
+{
+  "name": "MCP_RealEstate_MegaWorkflow",
+  "version": "1.0.0",
+  "description": "Complete real estate workflow with proper node connections",
+  "nodes": [
+    {
+      "id": "redwood_rcp",
+      "name": "Redwood RCP",
+      "type": "trigger",
+      "position": {"x": 100, "y": 100},
+      "outputs": ["auto_check"]
+    },
+    {
+      "id": "auto_check",
+      "name": "Auto Check",
+      "type": "validation",
+      "position": {"x": 250, "y": 100},
+      "inputs": ["redwood_rcp"],
+      "outputs": ["switch_canonical"]
+    },
+    {
+      "id": "switch_canonical",
+      "name": "Switch Canonical",
+      "type": "decision",
+      "position": {"x": 400, "y": 100},
+      "inputs": ["auto_check"],
+      "outputs": ["return_auth_failed", "call_sgdt_material"]
+    },
+    {
+      "id": "return_auth_failed",
+      "name": "Return Auth Failed",
+      "type": "return",
+      "position": {"x": 400, "y": 50},
+      "inputs": ["switch_canonical"],
+      "outputs": []
+    },
+    {
+      "id": "call_sgdt_material",
+      "name": "Call SGDT Material Finaltech",
+      "type": "api_call",
+      "position": {"x": 550, "y": 100},
+      "inputs": ["switch_canonical"],
+      "outputs": ["call_sgdt_property"]
+    },
+    {
+      "id": "call_sgdt_property",
+      "name": "Call SGDT Property Camp",
+      "type": "api_call",
+      "position": {"x": 700, "y": 100},
+      "inputs": ["call_sgdt_material"],
+      "outputs": ["call_sgdt_claiming"]
+    },
+    {
+      "id": "call_sgdt_claiming",
+      "name": "Call SGDT Claiming Reserve",
+      "type": "api_call",
+      "position": {"x": 700, "y": 200},
+      "inputs": ["call_sgdt_property"],
+      "outputs": ["return_g24_response", "call_sgdt_lead_upload"]
+    },
+    {
+      "id": "return_g24_response",
+      "name": "Return G24 Response",
+      "type": "api_call",
+      "position": {"x": 850, "y": 150},
+      "inputs": ["call_sgdt_claiming"],
+      "outputs": ["call_sgdt_lead_upload"]
+    },
+    {
+      "id": "call_sgdt_lead_upload",
+      "name": "Call SGDT Lead Upload",
+      "type": "api_call",
+      "position": {"x": 700, "y": 300},
+      "inputs": ["call_sgdt_claiming", "return_g24_response"],
+      "outputs": ["call_sgdt_lead_system"]
+    },
+    {
+      "id": "call_sgdt_lead_system",
+      "name": "Call SGDT Lead-In System",
+      "type": "api_call",
+      "position": {"x": 700, "y": 400},
+      "inputs": ["call_sgdt_lead_upload"],
+      "outputs": ["call_sgdt_offer_compare"]
+    },
+    {
+      "id": "call_sgdt_offer_compare",
+      "name": "Call SGDT-Offer Compare",
+      "type": "api_call",
+      "position": {"x": 700, "y": 500},
+      "inputs": ["call_sgdt_lead_system"],
+      "outputs": ["call_sgdt_compact_services"]
+    },
+    {
+      "id": "call_sgdt_compact_services",
+      "name": "Call SGDT Compact Services Transfer",
+      "type": "api_call",
+      "position": {"x": 550, "y": 550},
+      "inputs": ["call_sgdt_offer_compare"],
+      "outputs": ["call_sgdt_compact_minerations"]
+    },
+    {
+      "id": "call_sgdt_compact_minerations",
+      "name": "Call SGDT Compact Minerations",
+      "type": "api_call",
+      "position": {"x": 550, "y": 650},
+      "inputs": ["call_sgdt_compact_services"],
+      "outputs": ["call_sgdt_ms_general"]
+    },
+    {
+      "id": "call_sgdt_ms_general",
+      "name": "Call SGDT M-S-General",
+      "type": "api_call",
+      "position": {"x": 700, "y": 650},
+      "inputs": ["call_sgdt_compact_minerations"],
+      "outputs": ["call_sgdt_client_creation"]
+    },
+    {
+      "id": "call_sgdt_client_creation",
+      "name": "Call SGDT Client Creation Selection",
+      "type": "api_call",
+      "position": {"x": 700, "y": 750},
+      "inputs": ["call_sgdt_ms_general"],
+      "outputs": ["return_initialized_confirmed"]
+    },
+    {
+      "id": "return_initialized_confirmed",
+      "name": "Return Initialized Confirmed",
+      "type": "return",
+      "position": {"x": 550, "y": 400},
+      "inputs": ["call_sgdt_client_creation"],
+      "outputs": []
+    },
+    {
+      "id": "logged_error",
+      "name": "Logged Error",
+      "type": "error_handler",
+      "position": {"x": 850, "y": 450},
+      "inputs": ["*"],
+      "outputs": ["return_error"]
+    },
+    {
+      "id": "return_error",
+      "name": "Return Error",
+      "type": "return",
+      "position": {"x": 950, "y": 450},
+      "inputs": ["logged_error"],
+      "outputs": []
+    }
+  ],
+  "connections": [
+    {"from": "redwood_rcp", "to": "auto_check"},
+    {"from": "auto_check", "to": "switch_canonical"},
+    {"from": "switch_canonical", "to": "return_auth_failed", "condition": "auth_failed"},
+    {"from": "switch_canonical", "to": "call_sgdt_material", "condition": "auth_success"},
+    {"from": "call_sgdt_material", "to": "call_sgdt_property"},
+    {"from": "call_sgdt_property", "to": "call_sgdt_claiming"},
+    {"from": "call_sgdt_claiming", "to": "return_g24_response"},
+    {"from": "call_sgdt_claiming", "to": "call_sgdt_lead_upload"},
+    {"from": "return_g24_response", "to": "call_sgdt_lead_upload"},
+    {"from": "call_sgdt_lead_upload", "to": "call_sgdt_lead_system"},
+    {"from": "call_sgdt_lead_system", "to": "call_sgdt_offer_compare"},
+    {"from": "call_sgdt_offer_compare", "to": "call_sgdt_compact_services"},
+    {"from": "call_sgdt_compact_services", "to": "call_sgdt_compact_minerations"},
+    {"from": "call_sgdt_compact_minerations", "to": "call_sgdt_ms_general"},
+    {"from": "call_sgdt_ms_general", "to": "call_sgdt_client_creation"},
+    {"from": "call_sgdt_client_creation", "to": "return_initialized_confirmed"},
+    {"from": "*", "to": "logged_error", "condition": "on_error"},
+    {"from": "logged_error", "to": "return_error"}
+  ],
+  "error_handling": {
+    "global_error_handler": "logged_error",
+    "retry_attempts": 3,
+    "timeout": 30000
+  }
+}
