@@ -1,0 +1,84 @@
+{
+  "name": "Webhook_Trigger_Workflow",
+  "version": "1.0.0",
+  "description": "Webhook-based trigger workflow that initiates the MCP Real Estate MegaWorkflow",
+  "webhook_config": {
+    "endpoint": "/webhook/real-estate",
+    "method": "POST",
+    "auth_required": true,
+    "triggers_workflow": "MCP_RealEstate_MegaWorkflow"
+  },
+  "nodes": [
+    {
+      "id": "webhook_trigger",
+      "name": "Webhook",
+      "type": "webhook_trigger",
+      "position": {"x": 100, "y": 100},
+      "config": {
+        "listen_path": "/webhook/real-estate",
+        "methods": ["POST"],
+        "authentication": "api_key"
+      },
+      "outputs": ["http_request"]
+    },
+    {
+      "id": "http_request",
+      "name": "HTTP Request",
+      "type": "http_request",
+      "position": {"x": 300, "y": 100},
+      "config": {
+        "method": "POST",
+        "url": "https://claude.dealiq.com/api/workflow/execute",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${API_TOKEN}"
+        },
+        "body_template": {
+          "workflow_id": "MCP_RealEstate_MegaWorkflow",
+          "trigger_source": "webhook",
+          "payload": "${webhook.body}"
+        }
+      },
+      "inputs": ["webhook_trigger"],
+      "outputs": ["respond_to_webhook"]
+    },
+    {
+      "id": "respond_to_webhook",
+      "name": "Respond to Webhook",
+      "type": "webhook_response",
+      "position": {"x": 500, "y": 100},
+      "config": {
+        "status_code": 200,
+        "response_template": {
+          "success": true,
+          "message": "Workflow initiated",
+          "workflow_id": "${http_request.response.workflow_id}",
+          "execution_id": "${http_request.response.execution_id}"
+        }
+      },
+      "inputs": ["http_request"],
+      "outputs": []
+    }
+  ],
+  "connections": [
+    {
+      "from": "webhook_trigger",
+      "to": "http_request",
+      "condition": "always"
+    },
+    {
+      "from": "http_request",
+      "to": "respond_to_webhook",
+      "condition": "success"
+    }
+  ],
+  "integration": {
+    "type": "trigger_cascade",
+    "primary_workflow": "MCP_RealEstate_MegaWorkflow",
+    "trigger_mapping": {
+      "webhook.body.property_data": "redwood_rcp.input.data",
+      "webhook.body.customer_id": "redwood_rcp.input.customer_id",
+      "webhook.headers.authorization": "auto_check.auth_token"
+    }
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "name": "Integrated_RealEstate_Workflow_System",
+  "version": "2.0.0",
+  "description": "Complete integrated workflow system with webhook trigger and real estate processing",
+  "workflows": [
+    {
+      "id": "webhook_trigger",
+      "name": "Webhook Trigger Workflow",
+      "role": "entry_point",
+      "triggers": ["mcp_realestate_megaworkflow"]
+    },
+    {
+      "id": "mcp_realestate_megaworkflow",
+      "name": "MCP Real Estate MegaWorkflow",
+      "role": "main_processor",
+      "triggered_by": ["webhook_trigger"]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "webhook_trigger",
+      "name": "Webhook",
+      "type": "webhook_trigger",
+      "workflow": "webhook_trigger",
+      "position": {"x": 50, "y": 100},
+      "config": {
+        "listen_path": "/webhook/real-estate",
+        "methods": ["POST"]
+      },
+      "outputs": ["http_request"]
+    },
+    {
+      "id": "http_request",
+      "name": "HTTP Request",
+      "type": "http_request",
+      "workflow": "webhook_trigger",
+      "position": {"x": 200, "y": 100},
+      "config": {
+        "method": "POST",
+        "url": "https://claude.dealiq.com/api/workflow/execute",
+        "forwards_to": "redwood_rcp"
+      },
+      "inputs": ["webhook_trigger"],
+      "outputs": ["respond_to_webhook", "redwood_rcp"]
+    },
+    {
+      "id": "respond_to_webhook",
+      "name": "Respond to Webhook",
+      "type": "webhook_response",
+      "workflow": "webhook_trigger",
+      "position": {"x": 350, "y": 50},
+      "inputs": ["http_request"],
+      "outputs": []
+    },
+    {
+      "id": "redwood_rcp",
+      "name": "Redwood RCP",
+      "type": "trigger",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 350, "y": 150},
+      "inputs": ["http_request"],
+      "outputs": ["auto_check"]
+    },
+    {
+      "id": "auto_check",
+      "name": "Auto Check",
+      "type": "validation",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 500, "y": 150},
+      "inputs": ["redwood_rcp"],
+      "outputs": ["switch_canonical"]
+    },
+    {
+      "id": "switch_canonical",
+      "name": "Switch Canonical",
+      "type": "decision",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 650, "y": 150},
+      "inputs": ["auto_check"],
+      "outputs": ["return_auth_failed", "call_sgdt_material"]
+    },
+    {
+      "id": "return_auth_failed",
+      "name": "Return Auth Failed",
+      "type": "return",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 650, "y": 100},
+      "inputs": ["switch_canonical"],
+      "outputs": []
+    },
+    {
+      "id": "call_sgdt_material",
+      "name": "Call SGDT Material Finaltech",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 800, "y": 150},
+      "inputs": ["switch_canonical"],
+      "outputs": ["call_sgdt_property"]
+    },
+    {
+      "id": "call_sgdt_property",
+      "name": "Call SGDT Property Camp",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 150},
+      "inputs": ["call_sgdt_material"],
+      "outputs": ["call_sgdt_claiming"]
+    },
+    {
+      "id": "call_sgdt_claiming",
+      "name": "Call SGDT Claiming Reserve",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 250},
+      "inputs": ["call_sgdt_property"],
+      "outputs": ["return_g24_response", "call_sgdt_lead_upload"]
+    },
+    {
+      "id": "return_g24_response",
+      "name": "Return G24 Response",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 1100, "y": 200},
+      "inputs": ["call_sgdt_claiming"],
+      "outputs": ["call_sgdt_lead_upload"]
+    },
+    {
+      "id": "call_sgdt_lead_upload",
+      "name": "Call SGDT Lead Upload",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 350},
+      "inputs": ["call_sgdt_claiming", "return_g24_response"],
+      "outputs": ["call_sgdt_lead_system"]
+    },
+    {
+      "id": "call_sgdt_lead_system",
+      "name": "Call SGDT Lead-In System",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 450},
+      "inputs": ["call_sgdt_lead_upload"],
+      "outputs": ["call_sgdt_offer_compare"]
+    },
+    {
+      "id": "call_sgdt_offer_compare",
+      "name": "Call SGDT-Offer Compare",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 550},
+      "inputs": ["call_sgdt_lead_system"],
+      "outputs": ["call_sgdt_compact_services"]
+    },
+    {
+      "id": "call_sgdt_compact_services",
+      "name": "Call SGDT Compact Services Transfer",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 800, "y": 600},
+      "inputs": ["call_sgdt_offer_compare"],
+      "outputs": ["call_sgdt_compact_minerations"]
+    },
+    {
+      "id": "call_sgdt_compact_minerations",
+      "name": "Call SGDT Compact Minerations",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 800, "y": 700},
+      "inputs": ["call_sgdt_compact_services"],
+      "outputs": ["call_sgdt_ms_general"]
+    },
+    {
+      "id": "call_sgdt_ms_general",
+      "name": "Call SGDT M-S-General",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 700},
+      "inputs": ["call_sgdt_compact_minerations"],
+      "outputs": ["call_sgdt_client_creation"]
+    },
+    {
+      "id": "call_sgdt_client_creation",
+      "name": "Call SGDT Client Creation Selection",
+      "type": "api_call",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 950, "y": 800},
+      "inputs": ["call_sgdt_ms_general"],
+      "outputs": ["return_initialized_confirmed"]
+    },
+    {
+      "id": "return_initialized_confirmed",
+      "name": "Return Initialized Confirmed",
+      "type": "return",
+      "workflow": "mcp_realestate_megaworkflow",
+      "position": {"x": 800, "y": 450},
+      "inputs": ["call_sgdt_client_creation"],
+      "outputs": []
+    },
+    {
+      "id": "logged_error",
+      "name": "Logged Error",
+      "type": "error_handler",
+      "workflow": "both",
+      "position": {"x": 1100, "y": 500},
+      "inputs": ["*"],
+      "outputs": ["return_error"]
+    },
+    {
+      "id": "return_error",
+      "name": "Return Error",
+      "type": "return",
+      "workflow": "both",
+      "position": {"x": 1200, "y": 500},
+      "inputs": ["logged_error"],
+      "outputs": []
+    }
+  ],
+  "connections": [
+    {"from": "webhook_trigger", "to": "http_request", "type": "webhook_to_http"},
+    {"from": "http_request", "to": "respond_to_webhook", "type": "async_response"},
+    {"from": "http_request", "to": "redwood_rcp", "type": "workflow_trigger", "async": true},
+    {"from": "redwood_rcp", "to": "auto_check"},
+    {"from": "auto_check", "to": "switch_canonical"},
+    {"from": "switch_canonical", "to": "return_auth_failed", "condition": "auth_failed"},
+    {"from": "switch_canonical", "to": "call_sgdt_material", "condition": "auth_success"},
+    {"from": "call_sgdt_material", "to": "call_sgdt_property"},
+    {"from": "call_sgdt_property", "to": "call_sgdt_claiming"},
+    {"from": "call_sgdt_claiming", "to": "return_g24_response"},
+    {"from": "call_sgdt_claiming", "to": "call_sgdt_lead_upload"},
+    {"from": "return_g24_response", "to": "call_sgdt_lead_upload"},
+    {"from": "call_sgdt_lead_upload", "to": "call_sgdt_lead_system"},
+    {"from": "call_sgdt_lead_system", "to": "call_sgdt_offer_compare"},
+    {"from": "call_sgdt_offer_compare", "to": "call_sgdt_compact_services"},
+    {"from": "call_sgdt_compact_services", "to": "call_sgdt_compact_minerations"},
+    {"from": "call_sgdt_compact_minerations", "to": "call_sgdt_ms_general"},
+    {"from": "call_sgdt_ms_general", "to": "call_sgdt_client_creation"},
+    {"from": "call_sgdt_client_creation", "to": "return_initialized_confirmed"},
+    {"from": "*", "to": "logged_error", "condition": "on_error"},
+    {"from": "logged_error", "to": "return_error"}
+  ],
+  "error_handling": {
+    "global_error_handler": "logged_error",
+    "retry_attempts": 3,
+    "timeout": 30000
+  },
+  "integration_architecture": {
+    "pattern": "Webhook → HTTP Gateway → Main Workflow",
+    "async_execution": true,
+    "response_strategy": "immediate_ack_with_async_processing"
+  }
+}
